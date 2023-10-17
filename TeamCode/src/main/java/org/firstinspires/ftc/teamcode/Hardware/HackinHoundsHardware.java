@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -15,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -31,13 +34,12 @@ public class HackinHoundsHardware extends Hardware {
     public DcMotorEx  rightFront;
     public DcMotorEx  leftBack;
     public DcMotorEx  rightBack;
-    public BNO055IMU imu;
-    public Orientation angles;
-    public Acceleration gravity;
+    public IMU imu;
+    public YawPitchRollAngles angles;
     public Servo claw;
     public DcMotorEx slide;
 
-    private Orientation             lastAngles = new Orientation();
+    private YawPitchRollAngles             lastAngles;
     private static double                  globalAngle;
 
     // 1000 ticks was roughly 18 in.
@@ -76,8 +78,8 @@ public class HackinHoundsHardware extends Hardware {
         robotMap = hwMap;
 
         // Define and Initialize Motors for drivetrain
-        leftFront  = robotMap.get(DcMotorEx.class, "leftFront");
-        rightFront = robotMap.get(DcMotorEx.class, "rightFront");
+        leftFront  = robotMap.get(DcMotorEx.class, "left_front");
+        rightFront = robotMap.get(DcMotorEx.class, "right_front");
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -85,46 +87,34 @@ public class HackinHoundsHardware extends Hardware {
         //leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack  = robotMap.get(DcMotorEx.class, "leftBack");
-        rightBack = robotMap.get(DcMotorEx.class, "rightBack");
+        leftBack  = robotMap.get(DcMotorEx.class, "left_back");
+        rightBack = robotMap.get(DcMotorEx.class, "right_back");
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        claw = robotMap.get(Servo.class, "claw");
-        slide = robotMap.get(DcMotorEx.class, "slide");
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Defines the REV Hub's internal IMU (Gyro)
-        imu = robotMap.get(BNO055IMU.class, "imu");
+        imu = robotMap.get(IMU.class, "imu");
 
-        // Defines the parameters for the gyro (units)
-        BNO055IMU.Parameters imuParameters = new BNO055IMU.Parameters();
-        imuParameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        imuParameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        imuParameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        imuParameters.loggingEnabled      = true;
-        imuParameters.loggingTag          = "IMU";
-        imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-        // Intializes the parameters previously defined
-        imu.initialize(imuParameters);
+        RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+        RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logo, usb);
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
+        resetAngle();
     }
 
     public void resetAngle() {
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+        lastAngles = imu.getRobotYawPitchRollAngles();
         globalAngle = 0;
     }
 
     public double getAngle() {
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+        YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
+        double deltaAngle = angles.getYaw(AngleUnit.DEGREES) - lastAngles.getYaw(AngleUnit.DEGREES);
         if (deltaAngle < -180)
             deltaAngle += 360;
         else if (deltaAngle > 180)

@@ -42,6 +42,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
 
 
@@ -64,7 +65,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
 public class HackinHounds_Mechanum extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private HackinHoundsHardware robot;
+    private HackinHoundsHardware robot = new HackinHoundsHardware();
 
     @Override
     public void runOpMode() {
@@ -78,18 +79,21 @@ public class HackinHounds_Mechanum extends LinearOpMode {
         while (opModeIsActive()) {
             double angle = robot.getAngle();
             double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-            double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) + Math.PI / 4;
+            double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) + Math.PI / 4;
             robotAngle = robotAngle - Math.toRadians(angle);
             double rightX = gamepad1.right_stick_x * 0.65;
-            final double lf = -r * Math.cos(robotAngle) + rightX;
+            final double lf = r * Math.cos(robotAngle) + rightX;
             final double lb = r * Math.sin(robotAngle) + rightX;
-            final double rf = -r * Math.cos(robotAngle) - rightX;
+            final double rf = r * Math.cos(robotAngle) - rightX;
             final double rb = r * Math.sin(robotAngle) - rightX;
 
             robot.leftFront.setPower(lf);
             robot.leftBack.setPower(lb);
             robot.rightFront.setPower(rf);
             robot.rightBack.setPower(rb);
+
+            telemetry.addData("Angle:", "%f", angle);
+            telemetry.update();
         }
     }
 }
