@@ -115,37 +115,22 @@ public class HackinHoundsHardware extends Hardware {
 
         // Intializes the parameters previously defined
         imu.initialize(imuParameters);
-
     }
 
-    public void resetAngle()
-    {
-        //don't use resetAngle, it messes with the absolute heading
+    public void resetAngle() {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
-
         globalAngle = 0;
     }
 
-    public double getAngle()
-    {
-        // We experimentally determined the Z axis is the axis we want to use for heading angle.
-        // We have to process the angle because the imu works in euler angles so the Z axis is
-        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
-        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
-
+    public double getAngle() {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
-
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-
         if (deltaAngle < -180)
             deltaAngle += 360;
         else if (deltaAngle > 180)
             deltaAngle -= 360;
-
         globalAngle += deltaAngle;
-
         lastAngles = angles;
-
         return globalAngle;
     }
 }
