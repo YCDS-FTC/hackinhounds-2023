@@ -118,6 +118,19 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             robot.leftBack.setPower(lb);
             robot.rightFront.setPower(rf);
             robot.rightBack.setPower(rb);
+
+            double armPower = gamepad2.left_stick_y * 0.2;
+            double currentPos = robot.arm.getCurrentPosition();
+            if ((armPower > 0) && (currentPos > -2400)) {
+                robot.arm.setPower(armPower);
+            } else if ((armPower < 0) && (currentPos < 30)) {
+                robot.arm.setPower(armPower);
+            } else
+                robot.arm.setPower(0);
+
+            //Telemetry
+            telemetry.addData("Arm Pos:", "%d", robot.arm.getCurrentPosition());
+            telemetry.update();
         }
     }
 }
