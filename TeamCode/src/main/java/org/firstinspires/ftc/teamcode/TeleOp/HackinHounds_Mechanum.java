@@ -93,6 +93,10 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             robot.rightBack.setPower(rb);
 
             telemetry.addData("Angle:", "%f", angle);
+            telemetry.addData("Left Front::", "%f", lf);
+            telemetry.addData("Left Back:", "%f", lb);
+            telemetry.addData("Right Front:", "%f", rf);
+            telemetry.addData("Right Back:", "%f", rb);
             telemetry.update();
         }
     }
