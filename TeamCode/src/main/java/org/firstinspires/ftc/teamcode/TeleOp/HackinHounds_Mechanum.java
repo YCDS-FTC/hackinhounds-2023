@@ -77,27 +77,39 @@ public class HackinHounds_Mechanum extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            double angle = robot.getAngle();
-            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-            double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) + Math.PI / 4;
-            robotAngle = robotAngle - Math.toRadians(angle);
-            double rightX = gamepad1.right_stick_x * 0.65;
-            final double lf = r * Math.cos(robotAngle) + rightX;
-            final double lb = r * Math.sin(robotAngle) + rightX;
-            final double rf = r * Math.cos(robotAngle) - rightX;
-            final double rb = r * Math.sin(robotAngle) - rightX;
-
+//            double angle = robot.getAngle();
+//            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+//            double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) + Math.PI / 4;
+//            robotAngle = robotAngle - Math.toRadians(angle);
+//            double rightX = gamepad1.right_stick_x * 0.65;
+//            final double lf = r * Math.cos(robotAngle) + rightX;
+//            final double lb = r * Math.sin(robotAngle) + rightX;
+//            final double rf = r * Math.cos(robotAngle) - rightX;
+//            final double rb = r * Math.sin(robotAngle) - rightX;
+//
+//            robot.leftFront.setPower(lf);
+//            robot.leftBack.setPower(lb);
+//            robot.rightFront.setPower(rf);
+//            robot.rightBack.setPower(rb);
+//
+//            telemetry.addData("Angle:", "%f", angle);
+//            telemetry.addData("Left Front:", "%f", lf);
+//            telemetry.addData("Left Back:", "%f", lb);
+//            telemetry.addData("Right Front:", "%f", rf);
+//            telemetry.addData("Right Back:", "%f", rb);
+//            telemetry.update();
+            double y = -gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x * 1.1;
+            double rx = gamepad1.right_stick_x;
+            double d = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double lf = (y + x + rx) / d;
+            double lb = (y - x + rx) / d;
+            double rf = (y - x - rx) / d;
+            double rb = (y + x - rx) / d;
             robot.leftFront.setPower(lf);
             robot.leftBack.setPower(lb);
             robot.rightFront.setPower(rf);
             robot.rightBack.setPower(rb);
-
-            telemetry.addData("Angle:", "%f", angle);
-            telemetry.addData("Left Front::", "%f", lf);
-            telemetry.addData("Left Back:", "%f", lb);
-            telemetry.addData("Right Front:", "%f", rf);
-            telemetry.addData("Right Back:", "%f", rb);
-            telemetry.update();
         }
     }
 }

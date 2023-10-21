@@ -95,7 +95,6 @@ public class HackinHoundsHardware extends Hardware {
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");
