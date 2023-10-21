@@ -98,6 +98,13 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 //            telemetry.addData("Right Front:", "%f", rf);
 //            telemetry.addData("Right Back:", "%f", rb);
 //            telemetry.update();
+            double pass = 0;
+            if (gamepad1.a);
+                pass = 1;
+            if (gamepad1.b);
+                if (pass == 1);
+                    pass = 2;
+
             double y = -gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x * 1.1;
             double rx = gamepad1.right_stick_x;
@@ -106,10 +113,11 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             double lb = (y - x + rx) / d;
             double rf = (y - x - rx) / d;
             double rb = (y + x - rx) / d;
-            robot.leftFront.setPower(lf);
-            robot.leftBack.setPower(lb);
-            robot.rightFront.setPower(rf);
-            robot.rightBack.setPower(rb);
+            if (pass == 2);
+                robot.leftFront.setPower(lf);
+                robot.leftBack.setPower(lb);
+                robot.rightFront.setPower(rf);
+                robot.rightBack.setPower(rb);
         }
     }
 }
