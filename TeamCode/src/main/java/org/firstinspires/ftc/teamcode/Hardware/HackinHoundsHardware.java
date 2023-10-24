@@ -37,8 +37,7 @@ public class HackinHoundsHardware extends Hardware {
     public DcMotorEx arm;
     public IMU imu;
     public YawPitchRollAngles angles;
-    public Servo claw;
-    public DcMotorEx slide;
+    public Servo far_arm;
 
     private YawPitchRollAngles             lastAngles;
     private static double                  globalAngle;
@@ -101,6 +100,8 @@ public class HackinHoundsHardware extends Hardware {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        far_arm = robotMap.get(Servo.class, "far_arm");
+
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");
 
@@ -112,6 +113,7 @@ public class HackinHoundsHardware extends Hardware {
     }
 
     public void resetAngle() {
+        imu.resetYaw();
         lastAngles = imu.getRobotYawPitchRollAngles();
         globalAngle = 0;
     }
