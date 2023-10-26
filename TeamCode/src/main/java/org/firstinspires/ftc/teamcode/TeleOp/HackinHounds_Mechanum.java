@@ -66,6 +66,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private HackinHoundsHardware robot = new HackinHoundsHardware();
+    double Position = 0.5;
 
     @Override
     public void runOpMode() {
@@ -98,26 +99,42 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 //            telemetry.addData("Right Front:", "%f", rf);
 //            telemetry.addData("Right Back:", "%f", rb);
 //            telemetry.update();
-            double pass = 0;
-            if (gamepad1.a);
-                pass = 1;
-            if (gamepad1.b);
-                if (pass == 1);
-                    pass = 2;
 
+            double facing = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             double y = -gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x * 1.1;
             double rx = gamepad1.right_stick_x;
-            double d = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double lf = (y + x + rx) / d;
-            double lb = (y - x + rx) / d;
-            double rf = (y - x - rx) / d;
-            double rb = (y + x - rx) / d;
-            if (pass == 2);
-                robot.leftFront.setPower(lf);
-                robot.leftBack.setPower(lb);
-                robot.rightFront.setPower(rf);
-                robot.rightBack.setPower(rb);
+
+            double rotX = x * Math.cos(-facing) - y * Math.sin(-facing);
+            rotX = rotX * 1.1;
+            double rotY = x * Math.sin(-facing) + y * Math.cos(-facing);
+
+            double d = Math.max(Math.abs(rotX) + Math.abs(rotY) + Math.abs(rx), 1);
+
+            double lf = (rotY + rotX + rx) / d;
+            double lb = (rotY - rotX + rx) / d;
+            double rf = (rotY - rotX - rx) / d;
+            double rb = (rotY + rotX - rx) / d;
+
+            robot.leftFront.setPower(lf);
+            robot.leftBack.setPower(lb);
+            robot.rightFront.setPower(rf);
+            robot.rightBack.setPower(rb);
+
+            double armPower = gamepad2.left_stick_y * 0.5;
+            double currentPos = robot.arm.getCurrentPosition();
+            if ((armPower < 0) && (currentPos > -2300)) {
+                robot.arm.setPower(armPower);
+            } else if ((armPower > 0) && (currentPos < -100)) {
+                robot.arm.setPower(armPower);
+            } else
+                robot.arm.setPower(0);
+
+            Position = Position + (gamepad2.right_stick_y * 0.1);
+            robot.far_arm.setPosition(Position);
+            //Telemetry
+            telemetry.addData("Arm Pos:", "%d", robot.arm.getCurrentPosition());
+            telemetry.update();
         }
     }
 }
