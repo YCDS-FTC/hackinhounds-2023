@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -35,9 +36,11 @@ public class HackinHoundsHardware extends Hardware {
     public DcMotorEx  leftBack;
     public DcMotorEx  rightBack;
     public DcMotorEx arm;
+    public Servo top_claw;
+    public Servo bottom_claw;
     public IMU imu;
     public YawPitchRollAngles angles;
-    public Servo far_arm;
+    public DcMotor far_arm;
 
     private YawPitchRollAngles             lastAngles;
     private static double                  globalAngle;
@@ -99,8 +102,12 @@ public class HackinHoundsHardware extends Hardware {
         arm = robotMap.get(DcMotorEx.class, "arm");
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        far_arm = robotMap.get(Servo.class, "far_arm");
+        far_arm = robotMap.get(DcMotor.class, "far_arm");
+
+        top_claw = robotMap.get(Servo.class, "top_claw");
+        bottom_claw = robotMap.get(Servo.class, "bottom_claw");
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");

@@ -66,7 +66,10 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private HackinHoundsHardware robot = new HackinHoundsHardware();
-    double Position = 0.5;
+    double shift = 1;
+    boolean t_open = true;
+    boolean b_open = true;
+    boolean armMoving = false;
 
     @Override
     public void runOpMode() {
@@ -100,6 +103,18 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 //            telemetry.addData("Right Back:", "%f", rb);
 //            telemetry.update();
 
+            if (gamepad1.y) {
+                shift = 1;
+            }
+            if (gamepad1.x) {
+                shift = 0.75;
+            }
+            if (gamepad1.a) {
+                shift = 0.5;
+            }
+            if (gamepad1.b) {
+                shift = 0.25;
+            }
             double facing = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             double y = -gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x * 1.1;
@@ -116,25 +131,60 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             double rf = (rotY - rotX - rx) / d;
             double rb = (rotY + rotX - rx) / d;
 
-            robot.leftFront.setPower(lf);
-            robot.leftBack.setPower(lb);
-            robot.rightFront.setPower(rf);
-            robot.rightBack.setPower(rb);
+            robot.leftFront.setVelocity(2000 * lf * shift);
+            robot.leftBack.setVelocity(2000 * lb * shift);
+            robot.rightFront.setVelocity(2000 * rf * shift);
+            robot.rightBack.setVelocity(2000 * rb * shift);
+
+            robot.far_arm.setPower(gamepad2.right_stick_y);
 
             double armPower = gamepad2.left_stick_y * 0.5;
-            double currentPos = robot.arm.getCurrentPosition();
-            if ((armPower < 0) && (currentPos > -2300)) {
-                robot.arm.setPower(armPower);
-            } else if ((armPower > 0) && (currentPos < -100)) {
-                robot.arm.setPower(armPower);
-            } else
-                robot.arm.setPower(0);
 
-            Position = Position + (gamepad2.right_stick_y * 0.1);
-            robot.far_arm.setPosition(Position);
+            int currentPos = robot.arm.getCurrentPosition();
+            if ((armPower < -0.1) && (currentPos > -2300)) {
+                robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                armMoving = true;
+                robot.arm.setPower(armPower);
+            } else if ((armPower > 0.1) && (currentPos < -100)) {
+                robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                armMoving = true;
+                robot.arm.setPower(armPower);
+            } else {
+                if (armMoving) {
+                    armMoving = false;
+                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.arm.setTargetPosition(currentPos);
+                    robot.arm.setPower(0.05);
+                }
+            }
+
+            if (gamepad2.right_bumper) {
+                if (t_open == true) {
+                    robot.top_claw.setPosition(1);
+                    t_open = false;
+                } else {
+                    robot.top_claw.setPosition(0);
+                    t_open = true;
+                }
+            }
+
+            if (gamepad2.left_bumper) {
+                if (b_open == true) {
+                    robot.bottom_claw.setPosition(1);
+                    b_open = false;
+                } else {
+                    robot.bottom_claw.setPosition(0);
+                    b_open = true;
+                }
+            }
+
             //Telemetry
             telemetry.addData("Arm Pos:", "%d", robot.arm.getCurrentPosition());
             telemetry.update();
         }
+    }
+    private double clamp(double x, double min, double max) {
+
+        return Math.max(min,Math.min(max,x));
     }
 }
