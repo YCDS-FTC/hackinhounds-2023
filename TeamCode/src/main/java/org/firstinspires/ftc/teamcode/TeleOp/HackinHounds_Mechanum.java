@@ -158,6 +158,18 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                 }
             }
 
+            if (gamepad2.a){
+                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.arm.setTargetPosition(0);
+                robot.arm.setPower(0.05);
+            }
+
+            if (gamepad2.x){
+                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.arm.setTargetPosition(-1800);
+                robot.arm.setPower(0.05);
+            }
+
             if (gamepad2.right_bumper) {
                 if (t_open == true) {
                     robot.top_claw.setPosition(1);
