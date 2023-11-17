@@ -67,8 +67,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     double shift = 1;
-    boolean t_open = true;
-    boolean b_open = true;
+    boolean isShift = false;
     boolean armMoving = false;
 
     @Override
@@ -136,8 +135,6 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             robot.rightFront.setVelocity(2000 * rf * shift);
             robot.rightBack.setVelocity(2000 * rb * shift);
 
-            robot.far_arm.setPower(gamepad2.right_stick_y);
-
             double armPower = gamepad2.left_stick_y * 0.5;
 
             int currentPos = robot.arm.getCurrentPosition();
@@ -158,38 +155,31 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                 }
             }
 
-            if (gamepad2.a){
-                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if (gamepad2.dpad_up) {
                 robot.arm.setTargetPosition(0);
-                robot.arm.setPower(0.05);
-            }
-
-            if (gamepad2.x){
                 robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.arm.setTargetPosition(-1800);
-                robot.arm.setPower(0.05);
+                robot.arm.setPower(0.5);
             }
 
+            if (gamepad2.dpad_left) {
+                robot.arm.setTargetPosition(-750);
+                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.arm.setPower(0.5);
+            }
+
+            if (gamepad2.right_trigger >= 0.1) {
+                robot.top_claw.setPosition(0.1);
+            }
             if (gamepad2.right_bumper) {
-                if (t_open == true) {
-                    robot.top_claw.setPosition(1);
-                    t_open = false;
-                } else {
-                    robot.top_claw.setPosition(0);
-                    t_open = true;
-                }
+                robot.top_claw.setPosition(0.5);
             }
 
+            if (gamepad2.left_trigger >= 0.1) {
+                robot.bottom_claw.setPosition(0.8);
+            }
             if (gamepad2.left_bumper) {
-                if (b_open == true) {
-                    robot.bottom_claw.setPosition(1);
-                    b_open = false;
-                } else {
-                    robot.bottom_claw.setPosition(0);
-                    b_open = true;
-                }
+                robot.bottom_claw.setPosition(0.5);
             }
-
             //Telemetry
             telemetry.addData("Arm Pos:", "%d", robot.arm.getCurrentPosition());
             telemetry.update();

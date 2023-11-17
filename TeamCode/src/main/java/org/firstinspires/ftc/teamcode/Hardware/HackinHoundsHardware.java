@@ -105,6 +105,9 @@ public class HackinHoundsHardware extends Hardware {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         far_arm = robotMap.get(DcMotor.class, "far_arm");
+        far_arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        far_arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        far_arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         top_claw = robotMap.get(Servo.class, "top_claw");
         bottom_claw = robotMap.get(Servo.class, "bottom_claw");
