@@ -138,11 +138,11 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             double armPower = gamepad2.left_stick_y * 0.5;
 
             int currentPos = robot.arm.getCurrentPosition();
-            if ((armPower < -0.1) && (currentPos > -2300)) {
+            if ((armPower > 0.1) && (currentPos < 2300)) {
                 robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 armMoving = true;
                 robot.arm.setPower(armPower);
-            } else if ((armPower > 0.1) && (currentPos < -100)) {
+            } else if ((armPower < -0.1) && (currentPos > 100)) {
                 robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 armMoving = true;
                 robot.arm.setPower(armPower);
