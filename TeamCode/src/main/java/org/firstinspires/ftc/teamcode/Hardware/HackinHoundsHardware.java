@@ -35,12 +35,13 @@ public class HackinHoundsHardware extends Hardware {
     public DcMotorEx  rightFront;
     public DcMotorEx  leftBack;
     public DcMotorEx  rightBack;
-    public DcMotorEx arm;
+    public DcMotorEx slide;
+    public DcMotor arm;
+    public DcMotor wrist;
     public Servo top_claw;
     public Servo bottom_claw;
     public IMU imu;
     public YawPitchRollAngles angles;
-    public DcMotor far_arm;
 
     private YawPitchRollAngles             lastAngles;
     private static double                  globalAngle;
@@ -99,15 +100,20 @@ public class HackinHoundsHardware extends Hardware {
         //leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        arm = robotMap.get(DcMotorEx.class, "arm");
+        slide = robotMap.get(DcMotorEx.class, "slide");
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        arm = robotMap.get(DcMotor.class, "arm");
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        far_arm = robotMap.get(DcMotor.class, "far_arm");
-        far_arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        far_arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        far_arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wrist = robotMap.get(DcMotor.class, "wrist");
+        wrist.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wrist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        wrist.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         top_claw = robotMap.get(Servo.class, "top_claw");
         bottom_claw = robotMap.get(Servo.class, "bottom_claw");

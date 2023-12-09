@@ -67,7 +67,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     double shift = 1;
-    boolean isShift = false;
+    boolean slideMoving = false;
     boolean armMoving = false;
 
     @Override
@@ -135,14 +135,15 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             robot.rightFront.setVelocity(2000 * rf * shift);
             robot.rightBack.setVelocity(2000 * rb * shift);
 
-            double armPower = gamepad2.left_stick_y * 0.5;
 
+            double armPower = -gamepad2.right_stick_y * 0.5;
+            robot.arm.setPower(armPower);
             int currentPos = robot.arm.getCurrentPosition();
-            if ((armPower > 0.1) && (currentPos < 2300)) {
+            if ((armPower > 0.1) && (currentPos < 120)) {
                 robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 armMoving = true;
                 robot.arm.setPower(armPower);
-            } else if ((armPower < -0.1) && (currentPos > 100)) {
+            } else if ((armPower < -0.1) && (currentPos > -40)) {
                 robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 armMoving = true;
                 robot.arm.setPower(armPower);
@@ -151,21 +152,30 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                     armMoving = false;
                     robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.arm.setTargetPosition(currentPos);
-                    robot.arm.setPower(0.05);
+                    robot.arm.setPower(0.2);
                 }
             }
 
-            if (gamepad2.dpad_up) {
-                robot.arm.setTargetPosition(0);
-                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.arm.setPower(0.5);
+
+            double slidePower = -gamepad2.left_stick_y * 0.75;
+            int slideCurrentPos = robot.slide.getCurrentPosition();
+            if ((slidePower > 0.1) && (slideCurrentPos < 1100)) {
+                robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                slideMoving = true;
+                robot.slide.setPower(slidePower);
+            } else if ((slidePower < -0.1) && (slideCurrentPos > 20)) {
+                robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                slideMoving = true;
+                robot.slide.setPower(slidePower);
+            } else {
+                if (slideMoving) {
+                    slideMoving = false;
+                    robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.slide.setTargetPosition(slideCurrentPos);
+                    robot.slide.setPower(0.05);
+                }
             }
 
-            if (gamepad2.dpad_left) {
-                robot.arm.setTargetPosition(-750);
-                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.arm.setPower(0.5);
-            }
 
             if (gamepad2.right_trigger >= 0.1) {
                 robot.top_claw.setPosition(0.1);
@@ -182,6 +192,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
             //Telemetry
             telemetry.addData("Arm Pos:", "%d", robot.arm.getCurrentPosition());
+            telemetry.addData("Arm Pos:", "%d", robot.slide.getCurrentPosition());
             telemetry.update();
         }
     }
