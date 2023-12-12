@@ -36,8 +36,8 @@ public class HackinHoundsHardware extends Hardware {
     public DcMotorEx  leftBack;
     public DcMotorEx  rightBack;
     public DcMotorEx slide;
-    public DcMotor arm;
-    public DcMotor wrist;
+    public DcMotorEx arm;
+    public DcMotorEx wrist;
     public Servo top_claw;
     public Servo bottom_claw;
     public IMU imu;
@@ -105,12 +105,12 @@ public class HackinHoundsHardware extends Hardware {
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        arm = robotMap.get(DcMotor.class, "arm");
+        arm = robotMap.get(DcMotorEx.class, "arm");
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        wrist = robotMap.get(DcMotor.class, "wrist");
+        wrist = robotMap.get(DcMotorEx.class, "wrist");
         wrist.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wrist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         wrist.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

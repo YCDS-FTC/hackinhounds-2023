@@ -150,9 +150,9 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             } else {
                 if (armMoving) {
                     armMoving = false;
-                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.arm.setTargetPosition(currentPos);
-                    robot.arm.setPower(0.2);
+                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.arm.setPower(0.05);
                 }
             }
 
