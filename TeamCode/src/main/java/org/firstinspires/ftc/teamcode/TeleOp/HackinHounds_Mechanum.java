@@ -69,6 +69,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     double shift = 1;
     boolean slideMoving = false;
     boolean armMoving = false;
+    int currentPos = 0;
 
     @Override
     public void runOpMode() {
@@ -136,14 +137,15 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             robot.rightBack.setVelocity(2000 * rb * shift);
 
 
-            double armPower = -gamepad2.right_stick_y * 0.5;
-            robot.arm.setPower(armPower);
-            int currentPos = robot.arm.getCurrentPosition();
-            if ((armPower > 0.1) && (currentPos < 120)) {
+            double armPower = -gamepad2.right_stick_y * 0.75;
+            if (armMoving) {
+                currentPos = robot.arm.getCurrentPosition();
+            }
+            if ((armPower < -0.3) && (currentPos < 120)) {
                 robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 armMoving = true;
                 robot.arm.setPower(armPower);
-            } else if ((armPower < -0.1) && (currentPos > -40)) {
+            } else if ((armPower > 0.3) && (currentPos > -40)) {
                 robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 armMoving = true;
                 robot.arm.setPower(armPower);
@@ -152,7 +154,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                     armMoving = false;
                     robot.arm.setTargetPosition(currentPos);
                     robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.arm.setPower(0.05);
+                    robot.arm.setPower(0.2);
                 }
             }
 
