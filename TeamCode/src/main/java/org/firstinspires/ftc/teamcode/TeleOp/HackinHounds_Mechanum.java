@@ -81,28 +81,6 @@ public class HackinHounds_Mechanum extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-//            double angle = robot.getAngle();
-//            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-//            double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) + Math.PI / 4;
-//            robotAngle = robotAngle - Math.toRadians(angle);
-//            double rightX = gamepad1.right_stick_x * 0.65;
-//            final double lf = r * Math.cos(robotAngle) + rightX;
-//            final double lb = r * Math.sin(robotAngle) + rightX;
-//            final double rf = r * Math.cos(robotAngle) - rightX;
-//            final double rb = r * Math.sin(robotAngle) - rightX;
-//
-//            robot.leftFront.setPower(lf);
-//            robot.leftBack.setPower(lb);
-//            robot.rightFront.setPower(rf);
-//            robot.rightBack.setPower(rb);
-//
-//            telemetry.addData("Angle:", "%f", angle);
-//            telemetry.addData("Left Front:", "%f", lf);
-//            telemetry.addData("Left Back:", "%f", lb);
-//            telemetry.addData("Right Front:", "%f", rf);
-//            telemetry.addData("Right Back:", "%f", rb);
-//            telemetry.update();
-
             if (gamepad1.y) {
                 shift = 1;
             }
@@ -141,11 +119,11 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             if (armMoving) {
                 currentPos = robot.arm.getCurrentPosition();
             }
-            if ((armPower < -0.3) && (currentPos < 120)) {
+            if ((armPower < -0.3) && (currentPos > 0)) {
                 robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 armMoving = true;
                 robot.arm.setPower(armPower);
-            } else if ((armPower > 0.3) && (currentPos > -40)) {
+            } else if ((armPower > 0.3) && (currentPos < 850)) {
                 robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 armMoving = true;
                 robot.arm.setPower(armPower);
@@ -159,13 +137,13 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
 
 
-            double slidePower = -gamepad2.left_stick_y * 0.75;
+            double slidePower = -gamepad2.left_stick_y;
             int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((slidePower > 0.1) && (slideCurrentPos < 1100)) {
+            if ((slidePower > 0.2) && (slideCurrentPos < 1100)) {
                 robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 slideMoving = true;
                 robot.slide.setPower(slidePower);
-            } else if ((slidePower < -0.1) && (slideCurrentPos > 20)) {
+            } else if ((slidePower < -0.2) && (slideCurrentPos > 20)) {
                 robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 slideMoving = true;
                 robot.slide.setPower(slidePower);
@@ -178,28 +156,23 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                 }
             }
 
-//          if (gamepad2.b) {
-//              robot.wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//              robot.wrist.setTargetPosition(50);
-//              robot.wrist.setPower(0.5);
-//          }
-
             if (gamepad2.right_trigger >= 0.1) {
-                robot.top_claw.setPosition(0.1);
+                robot.top_claw.setPosition(0);
             }
             if (gamepad2.right_bumper) {
                 robot.top_claw.setPosition(0.5);
             }
 
             if (gamepad2.left_trigger >= 0.1) {
-                robot.bottom_claw.setPosition(0.8);
+                robot.bottom_claw.setPosition(1);
             }
             if (gamepad2.left_bumper) {
                 robot.bottom_claw.setPosition(0.5);
             }
             //Telemetry
             telemetry.addData("Arm Pos:", "%d", robot.arm.getCurrentPosition());
-            telemetry.addData("Arm Pos:", "%d", robot.slide.getCurrentPosition());
+            telemetry.addData("Right stick:", "%f", -gamepad2.right_stick_y);
+            telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
             telemetry.update();
         }
     }
