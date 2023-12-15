@@ -125,25 +125,7 @@ public class HackinHoundsHardware extends Hardware {
         RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logo, usb);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
-        resetAngle();
-    }
-
-    public void resetAngle() {
         imu.resetYaw();
-        lastAngles = imu.getRobotYawPitchRollAngles();
-        globalAngle = 0;
-    }
-
-    public double getAngle() {
-        YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
-        double deltaAngle = angles.getYaw(AngleUnit.DEGREES) - lastAngles.getYaw(AngleUnit.DEGREES);
-        if (deltaAngle < -180)
-            deltaAngle += 360;
-        else if (deltaAngle > 180)
-            deltaAngle -= 360;
-        globalAngle += deltaAngle;
-        lastAngles = angles;
-        return globalAngle;
     }
 }
 
