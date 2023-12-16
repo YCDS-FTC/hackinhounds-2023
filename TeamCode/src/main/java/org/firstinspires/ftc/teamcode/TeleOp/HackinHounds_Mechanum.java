@@ -116,35 +116,35 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             robot.rightBack.setVelocity(2000 * rb * shift);
 
 
-//            double armPower = -gamepad2.left_stick_y;
-//            if (armMoving) {
-//                currentPos = robot.arm.getCurrentPosition();
-//            }
-//            if ((armPower < -0.3) && (currentPos > -100)) {
-//                robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                armMoving = true;
-//                robot.arm.setPower(armPower);
-//            } else if ((armPower > 0.3) && (currentPos < 900)) {
-//                robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                armMoving = true;
-//                robot.arm.setPower(armPower);
-//            } else {
-//                if (armMoving) {
-//                    armMoving = false;
-//                    robot.arm.setTargetPosition(currentPos);
-//                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    robot.arm.setPower(0.05);
-//                }
-//            }
+            double armPower = -gamepad2.left_stick_y;
+            if (armMoving) {
+                currentPos = robot.arm.getCurrentPosition();
+            }
+            if ((armPower < -0.3) && (currentPos > -100)) {
+                robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                armMoving = true;
+                robot.arm.setPower(armPower);
+            } else if ((armPower > 0.3) && (currentPos < 900)) {
+                robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                armMoving = true;
+                robot.arm.setPower(armPower);
+            } else {
+                if (armMoving) {
+                    armMoving = false;
+                    robot.arm.setTargetPosition(currentPos);
+                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.arm.setPower(0.05);
+                }
+            }
 
 
 //            double slidePower = -gamepad2.left_stick_y;
             int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((gamepad2.dpad_up) && (slideCurrentPos < 1100)) {
+            if ((gamepad2.dpad_up || gamepad1.right_bumper) && (slideCurrentPos < 1100)) {
                 robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 slideMoving = true;
                 robot.slide.setPower(1);
-            } else if ((gamepad2.dpad_down) && (slideCurrentPos > 20)) {
+            } else if ((gamepad2.dpad_down || gamepad1.left_bumper) && (slideCurrentPos > 20)) {
                 robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 slideMoving = true;
                 robot.slide.setPower(-1);
@@ -155,59 +155,70 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                 }
             }
 
-//            double wristPower = -gamepad2.right_stick_y * 0.5;
-//            int wristCurrentPos = robot.wrist.getCurrentPosition();
-//            if ((wristPower > 0.2) && (wristCurrentPos < 60)) {
-//                robot.wrist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            double wristPower = -gamepad2.right_stick_y * 0.5;
+            int wristCurrentPos = robot.wrist.getCurrentPosition();
+            if ((wristPower > 0.2) && (wristCurrentPos < 130)) {
+                robot.wrist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                wristMoving = true;
+                robot.wrist.setPower(wristPower);
+            } else if ((wristPower < -0.2) && (wristCurrentPos > -150)) {
+                robot.wrist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                wristMoving = true;
+                robot.wrist.setPower(wristPower);
+            } else {
+                if (wristMoving) {
+                    wristMoving = false;
+                    robot.wrist.setTargetPosition(wristCurrentPos);
+                    robot.wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.wrist.setPower(0.05);
+                }
+            }
+
+//            if (gamepad2.a) {
+//                armMoving = true;
 //                wristMoving = true;
-//                robot.wrist.setPower(wristPower);
-//            } else if ((wristPower < -0.2) && (wristCurrentPos > -70)) {
-//                robot.wrist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                wristMoving = true;
-//                robot.wrist.setPower(wristPower);
-//            } else {
-//                if (wristMoving) {
+//                slideMoving = true;
+//                robot.arm.setTargetPosition(215);
+//                robot.wrist.setTargetPosition(-45);
+//                robot.slide.setTargetPosition(65);
+//            }
+//
+//
+//            if (armMoving) {
+//                if ((robot.arm.getCurrentPosition() > robot.arm.getTargetPosition() + 5) || (robot.arm.getCurrentPosition() < robot.arm.getTargetPosition() - 5)) {
+//                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                    robot.arm.setPower(0.4);
+//                } else {
+//                    armMoving = false;
+//                    robot.arm.setPower(0.05);
+//                }
+//            }
+//            if (wristMoving) {
+//                if ((robot.wrist.getCurrentPosition() > robot.wrist.getTargetPosition() + 2) || (robot.wrist.getCurrentPosition() < robot.wrist.getTargetPosition() - 2)) {
+//                    robot.wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                    robot.wrist.setPower(0.4);
+//                } else {
 //                    wristMoving = false;
-//                    robot.wrist.setPower(0);
+//                    robot.arm.setPower(0.05);
+//                }
+//            }
+//            if (slideMoving) {
+//                if ((robot.slide.getCurrentPosition() > robot.slide.getTargetPosition() + 5) || (robot.slide.getCurrentPosition() < robot.slide.getTargetPosition() - 5)) {
+//                    robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                    robot.slide.setPower(0.4);
+//                } else {
+//                    slideMoving = false;
+//                    robot.slide.setPower(0.05);
 //                }
 //            }
 
             if (gamepad2.a) {
-                armMoving = true;
-                wristMoving = true;
-                slideMoving = true;
-                robot.arm.setTargetPosition(215);
-                robot.wrist.setTargetPosition(-45);
-                robot.slide.setTargetPosition(65);
+                robot.wrist.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.wrist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
-
-
-            if (armMoving) {
-                if ((robot.arm.getCurrentPosition() > robot.arm.getTargetPosition() + 5) || (robot.arm.getCurrentPosition() < robot.arm.getTargetPosition() - 5)) {
-                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.arm.setPower(0.4);
-                } else {
-                    armMoving = false;
-                    robot.arm.setPower(0.05);
-                }
-            }
-            if (wristMoving) {
-                if ((robot.wrist.getCurrentPosition() > robot.wrist.getTargetPosition() + 2) || (robot.wrist.getCurrentPosition() < robot.wrist.getTargetPosition() - 2)) {
-                    robot.wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.wrist.setPower(0.4);
-                } else {
-                    wristMoving = false;
-                    robot.arm.setPower(0.05);
-                }
-            }
-            if (slideMoving) {
-                if ((robot.slide.getCurrentPosition() > robot.slide.getTargetPosition() + 5) || (robot.slide.getCurrentPosition() < robot.slide.getTargetPosition() - 5)) {
-                    robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.slide.setPower(0.4);
-                } else {
-                    slideMoving = false;
-                    robot.slide.setPower(0.05);
-                }
+            if (gamepad2.x) {
+                robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
 
             if (gamepad2.right_trigger >= 0.1) {
@@ -222,6 +233,10 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
             if (gamepad2.left_bumper) {
                 robot.bottom_claw.setPosition(0.5);
+            }
+
+            if (gamepad1.back) {
+                robot.imu.resetYaw();
             }
             //Telemetry
             telemetry.addData("Arm Pos:", "%d", robot.arm.getCurrentPosition());
