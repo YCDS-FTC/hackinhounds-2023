@@ -33,6 +33,7 @@ import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.Hardware.VisionTestHardware;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -143,7 +144,11 @@ public class TestVision extends LinearOpMode {
             for (int i = 0; i < blocks.length; i++) {
                 telemetry.addData("Block", blocks[i].toString());
             }
-
+            telemetry.addData("deviceName", robot.sensorDistance.getDeviceName() );
+            telemetry.addData("range", String.format("%.01f mm", robot.sensorDistance.getDistance(DistanceUnit.MM)));
+            telemetry.addData("range", String.format("%.01f cm", robot.sensorDistance.getDistance(DistanceUnit.CM)));
+            telemetry.addData("range", String.format("%.01f m", robot.sensorDistance.getDistance(DistanceUnit.METER)));
+            telemetry.addData("range", String.format("%.01f in", robot.sensorDistance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
         }
     }   // end method runOpMode()

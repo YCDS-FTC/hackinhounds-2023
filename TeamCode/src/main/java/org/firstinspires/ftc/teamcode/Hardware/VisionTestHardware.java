@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -14,12 +15,13 @@ public class VisionTestHardware extends Hardware {
     public HardwareMap robotMap;
 
     public static final int READ_PERIOD = 1;
-
+    public DistanceSensor sensorDistance;
     public HuskyLens huskyLens;
 
     public void init(HardwareMap hwMap) {
         robotMap = hwMap;
         huskyLens = robotMap.get(HuskyLens.class, "huskylens");
+        sensorDistance = robotMap.get(DistanceSensor.class, "DISensor");
     }
 
 }

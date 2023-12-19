@@ -243,6 +243,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             telemetry.addData("Right stick:", "%f", -gamepad2.right_stick_y);
             telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
             telemetry.addData("wrist Pos:", "%d", robot.wrist.getCurrentPosition());
+            telemetry.addData("LF", "%d", robot.leftBack.getCurrentPosition());
             telemetry.addData("Angle:", "%f", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             telemetry.update();
         }
