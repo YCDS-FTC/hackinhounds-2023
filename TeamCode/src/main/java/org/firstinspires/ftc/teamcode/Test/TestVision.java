@@ -149,6 +149,11 @@ public class TestVision extends LinearOpMode {
             telemetry.addData("range", String.format("%.01f cm", robot.sensorDistance.getDistance(DistanceUnit.CM)));
             telemetry.addData("range", String.format("%.01f m", robot.sensorDistance.getDistance(DistanceUnit.METER)));
             telemetry.addData("range", String.format("%.01f in", robot.sensorDistance.getDistance(DistanceUnit.INCH)));
+
+            //telemetry.addData("raw ultrasonic", robot.rangeSensor.rawUltrasonic());
+            //telemetry.addData("raw optical", robot.rangeSensor.rawOptical());
+            telemetry.addData("cm ultrasonic", "%.2f cm", robot.rangeSensor.cmUltrasonic());
+            telemetry.addData("in", "%.2f in", robot.rangeSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
         }
     }   // end method runOpMode()
