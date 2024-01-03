@@ -92,6 +92,7 @@ public class Blue_Left extends LinearOpMode {
         }
         startTime = runtime.seconds();
         steps.add(new MoveForDistance(robot, 1000, 100, 100, runtime, 5, 0.5, 1));
+
         steps.add(new SlideToPosition(robot, runtime, 500, 0.35, 5));
 
         // This is where we build the autonomous routine
