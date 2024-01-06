@@ -135,7 +135,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
             double slidePower = -gamepad2.left_stick_y;
             int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((slidePower > 0.3) && (slideCurrentPos < 9700)) {
+            if ((slidePower > 0.3) && (slideCurrentPos < 9600)) {
                 robot.slide.setPower(slidePower);
             } else if ((slidePower < -0.3) && (slideCurrentPos > 50)) {
                 robot.slide.setPower(slidePower);
