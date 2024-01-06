@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Command;
 import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 
-public class SetClaws extends Command {
+public class SetWrist extends Command {
     private ElapsedTime timer;
     private double startTime;
     private double runTime;
@@ -13,9 +13,8 @@ public class SetClaws extends Command {
     private double servoPosition;
     private boolean useInit;
     private boolean useEnd;
-    private String claw;
 
-    public SetClaws(Hardware robot, ElapsedTime timer, double runTime, String claw, double servoPosition) {
+    public SetWrist(Hardware robot, ElapsedTime timer, double runTime, double servoPosition) {
         super(robot);
         this.timer = timer;
         this.runTime = runTime*1000;
@@ -23,7 +22,6 @@ public class SetClaws extends Command {
         this.robot = (HackinHoundsHardware) getRobot();
         this.useInit = true;
         this.useEnd = true;
-        this.claw = claw;
         setState(STARTING);
     }
 
@@ -37,11 +35,7 @@ public class SetClaws extends Command {
         if (getState() == RUNNING) {
             double elapsedTime = timer.milliseconds()-startTime;
             if (elapsedTime < runTime) {
-                if (claw == "top") {
-                    robot.top_claw.setPosition(servoPosition);
-                } else if (claw == "bottom"){
-                    robot.bottom_claw.setPosition(servoPosition);
-                }
+                robot.wrist.setPosition(servoPosition);
             } else {
                 setState(ENDING);
             }
