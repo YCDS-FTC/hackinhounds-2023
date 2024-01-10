@@ -23,8 +23,6 @@ public class VisionTestHardware extends Hardware {
     public void init(HardwareMap hwMap) {
         robotMap = hwMap;
         huskyLens = robotMap.get(HuskyLens.class, "huskylens");
-        sensorDistance = robotMap.get(DistanceSensor.class, "DISensor");
-        rangeSensor = robotMap.get(ModernRoboticsI2cRangeSensor.class, "RIsensor");
     }
 
 }

@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.transition.Slide;
 
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -76,6 +77,7 @@ public class Blue_Left extends LinearOpMode {
     //Create elapsed time variable and an instance of elapsed time
     private ElapsedTime runtime = new ElapsedTime();
     private boolean done = false;
+    private int propPos = 0;
 
     @Override
     public void runOpMode() {
@@ -85,12 +87,43 @@ public class Blue_Left extends LinearOpMode {
         List<Command> steps = new ArrayList<>();
 
         int step = 0;
-
+        robot.huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
         // Waiting for start
         while(!isStarted()) {
+            HuskyLens.Block[] blocks = robot.huskyLens.blocks();
+            telemetry.addData("Block count", blocks.length);
+            for (int i = 0; i < blocks.length; i++) {
+                //int thisColorID = blocks[i].id;
+                //telemetry.addData("This Color ID", thisColorID);
+                telemetry.addData("Block", blocks[i].toString());
+            }
+            if (0 < blocks.length) {
+                if (blocks[0].x > 160) {
+                    telemetry.addLine( blocks[0].id + "is in the middle");
+                } else {
+                    telemetry.addLine(blocks[0].id + "is on the left");
+                }
+            } else {
+                telemetry.addLine(blocks[0].id + "is on the right");
+            }
             telemetry.update();
         }
         startTime = runtime.seconds();
+        HuskyLens.Block[] blocks = robot.huskyLens.blocks();
+        if (0 < blocks.length) {
+            if (blocks[0].x > 160) {
+                telemetry.addLine( blocks[0].id + "is in the middle");
+                propPos = 2;
+            } else {
+                telemetry.addLine(blocks[0].id + "is on the left");
+                propPos = 1;
+            }
+        } else {
+            telemetry.addLine(blocks[0].id + "is on the right");
+            propPos = 3;
+        }
+        telemetry.update();
+
         steps.add(new MoveForDistance(robot, 1000, 100, 100, runtime, 5, 0.5, 1));
 
         steps.add(new SlideToPosition(robot, runtime, 500, 0.35, 5));

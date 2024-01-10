@@ -113,7 +113,7 @@ public class TestVision extends LinearOpMode {
          * within the OpMode by calling selectAlgorithm() and passing it one of the values
          * found in the enumeration HuskyLens.Algorithm.
          */
-        robot.huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
+        robot.huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
 
         telemetry.update();
         waitForStart();
@@ -142,18 +142,30 @@ public class TestVision extends LinearOpMode {
             HuskyLens.Block[] blocks = robot.huskyLens.blocks();
             telemetry.addData("Block count", blocks.length);
             for (int i = 0; i < blocks.length; i++) {
+//                int thisColorID = blocks[i].id;
+//                telemetry.addData("This Color ID", thisColorID);
                 telemetry.addData("Block", blocks[i].toString());
             }
-            telemetry.addData("deviceName", robot.sensorDistance.getDeviceName() );
-            telemetry.addData("range", String.format("%.01f mm", robot.sensorDistance.getDistance(DistanceUnit.MM)));
-            telemetry.addData("range", String.format("%.01f cm", robot.sensorDistance.getDistance(DistanceUnit.CM)));
-            telemetry.addData("range", String.format("%.01f m", robot.sensorDistance.getDistance(DistanceUnit.METER)));
-            telemetry.addData("range", String.format("%.01f in", robot.sensorDistance.getDistance(DistanceUnit.INCH)));
 
-            //telemetry.addData("raw ultrasonic", robot.rangeSensor.rawUltrasonic());
-            //telemetry.addData("raw optical", robot.rangeSensor.rawOptical());
-            telemetry.addData("cm ultrasonic", "%.2f cm", robot.rangeSensor.cmUltrasonic());
-            telemetry.addData("in", "%.2f in", robot.rangeSensor.getDistance(DistanceUnit.INCH));
+            if (0 < blocks.length) {
+                if (blocks[0].x > 160) {
+                    telemetry.addLine("Its in the middle");
+                } else {
+                    telemetry.addLine("Its on the left");
+                }
+            } else {
+                telemetry.addLine("Its on the right");
+            }
+//            telemetry.addData("deviceName", robot.sensorDistance.getDeviceName() );
+//            telemetry.addData("range", String.format("%.01f mm", robot.sensorDistance.getDistance(DistanceUnit.MM)));
+//            telemetry.addData("range", String.format("%.01f cm", robot.sensorDistance.getDistance(DistanceUnit.CM)));
+//            telemetry.addData("range", String.format("%.01f m", robot.sensorDistance.getDistance(DistanceUnit.METER)));
+//            telemetry.addData("range", String.format("%.01f in", robot.sensorDistance.getDistance(DistanceUnit.INCH)));
+//
+//            //telemetry.addData("raw ultrasonic", robot.rangeSensor.rawUltrasonic());
+//            //telemetry.addData("raw optical", robot.rangeSensor.rawOptical());
+//            telemetry.addData("cm ultrasonic", "%.2f cm", robot.rangeSensor.cmUltrasonic());
+//            telemetry.addData("in", "%.2f in", robot.rangeSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
         }
     }   // end method runOpMode()
