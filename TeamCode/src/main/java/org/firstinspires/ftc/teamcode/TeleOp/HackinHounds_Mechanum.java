@@ -133,15 +133,17 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 //                }
 //            }
 
-            double slidePower = -gamepad2.left_stick_y;
-            int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((slidePower > 0.3) && (slideCurrentPos < 9600)) {
-                robot.slide.setPower(slidePower);
-            } else if ((slidePower < -0.3) && (slideCurrentPos > 50)) {
-                robot.slide.setPower(slidePower);
-            } else {
-                robot.slide.setPower(0);
-            }
+//            double slidePower = -gamepad2.left_stick_y;
+//            int slideCurrentPos = robot.slide.getCurrentPosition();
+//            if ((slidePower > 0.3) && (slideCurrentPos < 9600)) {
+//                robot.slide.setPower(slidePower);
+//            } else if ((slidePower < -0.3) && (slideCurrentPos > 50)) {
+//                robot.slide.setPower(slidePower);
+//            } else {
+//                robot.slide.setPower(0);
+//            }
+
+            robot.slide.setPower(-gamepad1.left_stick_y);
 
 
 

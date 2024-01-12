@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -41,6 +42,7 @@ public class HackinHoundsHardware extends Hardware {
     public Servo top_claw;
     public Servo bottom_claw;
     public HuskyLens huskyLens;
+    public ModernRoboticsI2cRangeSensor rangeSensor;
 
     public IMU imu;
     public YawPitchRollAngles angles;
@@ -58,15 +60,6 @@ public class HackinHoundsHardware extends Hardware {
     OpenCvCamera camera;
 
     static final double FEET_PER_METER = 3.28084;
-
-    // Lens intrinsics
-    // UNITS ARE PIXELS
-    // NOTE: this calibration is for the C920 webcam at 800x448.
-    // You will need to do your own calibration for other configurations!
-    double fx = 578.272;
-    double fy = 578.272;
-    double cx = 402.145;
-    double cy = 221.506;
 
     // UNITS ARE METERS
     double tagsize = 0.166;
@@ -112,6 +105,8 @@ public class HackinHoundsHardware extends Hardware {
         bottom_claw = robotMap.get(Servo.class, "bottom_claw");
 
         huskyLens = robotMap.get(HuskyLens.class, "huskylens");
+
+        rangeSensor = robotMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");

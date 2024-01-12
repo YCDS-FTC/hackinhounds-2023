@@ -38,7 +38,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AutonCommands.MoveForDistance;
+import org.firstinspires.ftc.teamcode.AutonCommands.Reposition;
 import org.firstinspires.ftc.teamcode.AutonCommands.SetClaws;
+import org.firstinspires.ftc.teamcode.AutonCommands.SetWrist;
 import org.firstinspires.ftc.teamcode.AutonCommands.StrafeForDistance;
 import org.firstinspires.ftc.teamcode.AutonCommands.TurnByAngle;
 import org.firstinspires.ftc.teamcode.Hardware.Command;
@@ -152,10 +154,13 @@ public class Blue_Left extends LinearOpMode {
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
         }
 
+        steps.add(new TurnByAngle(robot, runtime, -90, 0.5, 5));
 
+        steps.add(new Reposition(robot, runtime, 30, 5, 0.3));
 
+        steps.add(new SetWrist(robot, runtime, 1, 0.5));
 
-
+        steps.add(new SlideToPosition(robot, runtime, 120, 0.5, 5, true, false));
 
 
         // This is where we build the autonomous routine
