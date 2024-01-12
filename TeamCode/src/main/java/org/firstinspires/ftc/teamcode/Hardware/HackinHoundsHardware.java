@@ -49,7 +49,7 @@ public class HackinHoundsHardware extends Hardware {
     private static double                  globalAngle;
 
     // 1000 ticks was roughly 18 in.
-    public static final double TICK_PER_INCH = 600.0/12.0;
+    public static final double TICK_PER_INCH = 500.0/12.0;
     public static final double MinPower = 0.35;
 
     public enum ScoringPosition {LEFT, CENTER, RIGHT, NONE}

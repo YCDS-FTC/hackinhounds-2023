@@ -38,6 +38,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AutonCommands.MoveForDistance;
+import org.firstinspires.ftc.teamcode.AutonCommands.SetClaws;
+import org.firstinspires.ftc.teamcode.AutonCommands.StrafeForDistance;
+import org.firstinspires.ftc.teamcode.AutonCommands.TurnByAngle;
 import org.firstinspires.ftc.teamcode.Hardware.Command;
 import org.firstinspires.ftc.teamcode.AutonCommands.SlideToPosition;
 import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
@@ -99,12 +102,12 @@ public class Blue_Left extends LinearOpMode {
             }
             if (0 < blocks.length) {
                 if (blocks[0].x > 160) {
-                    telemetry.addLine( blocks[0].id + "is in the middle");
+                    telemetry.addLine( blocks[0].id + " is in the middle");
                 } else {
-                    telemetry.addLine(blocks[0].id + "is on the left");
+                    telemetry.addLine(blocks[0].id + " is on the left");
                 }
             } else {
-                telemetry.addLine(blocks[0].id + "is on the right");
+                telemetry.addLine("is on the right");
             }
             telemetry.update();
         }
@@ -112,21 +115,48 @@ public class Blue_Left extends LinearOpMode {
         HuskyLens.Block[] blocks = robot.huskyLens.blocks();
         if (0 < blocks.length) {
             if (blocks[0].x > 160) {
-                telemetry.addLine( blocks[0].id + "is in the middle");
+                telemetry.addLine( blocks[0].id + " is in the middle");
                 propPos = 2;
             } else {
-                telemetry.addLine(blocks[0].id + "is on the left");
+                telemetry.addLine(blocks[0].id + " is on the left");
                 propPos = 1;
             }
         } else {
-            telemetry.addLine(blocks[0].id + "is on the right");
+            telemetry.addLine( "is on the right");
             propPos = 3;
         }
         telemetry.update();
 
-        steps.add(new MoveForDistance(robot, 1000, 100, 100, runtime, 5, 0.5, 1));
+        steps.add(new SetClaws(robot, runtime, 1, "top", 0.5));
+        steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
 
-        steps.add(new SlideToPosition(robot, runtime, 500, 0.35, 5));
+        steps.add(new MoveForDistance(robot, 2, 0, 0, runtime, 5, 0.5, 1));
+
+        steps.add(new StrafeForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+
+        steps.add(new MoveForDistance(robot, 30, 5, 5, runtime, 5, 0.5, 1));
+
+        if (propPos == 1) {
+            steps.add(new TurnByAngle(robot, runtime, 45, 0.5, 5));
+            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+            steps.add(new SetClaws(robot, runtime, 1, "bottom", 1));
+            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+        } else if (propPos == 2) {
+            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+            steps.add(new SetClaws(robot, runtime, 1, "bottom", 1));
+            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+        } else if (propPos == 3) {
+            steps.add(new TurnByAngle(robot, runtime, 45, 0.5, 5));
+            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+            steps.add(new SetClaws(robot, runtime, 1, "bottom", 1));
+            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+        }
+
+
+
+
+
+
 
         // This is where we build the autonomous routine
         Command currentStep = steps.get(step);
