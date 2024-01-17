@@ -181,8 +181,8 @@ public class StrafeForDistance extends Command {
                 if (Math.signum(powerLevel)*(-FleftEndTicks + currentFLeftTicks) < 0  || Math.signum(powerLevel)*(-FrightEndTicks + currentFRightTicks) < 0 || Math.signum(powerLevel)*(BleftEndTicks - currentBLeftTicks) < 0  || Math.signum(powerLevel)*(BrightEndTicks - currentBRightTicks) < 0){
                     setState(ENDING);
                 } else {
-                    robot.leftFront.setPower(-power * powerDirection);
-                    robot.leftBack.setPower(power * powerDirection);
+                    robot.leftFront.setPower(power * powerDirection);
+                    robot.leftBack.setPower(-power * powerDirection);
                     robot.rightFront.setPower(-power * powerDirection);
                     robot.rightBack.setPower(power * powerDirection);
                 }
