@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -74,6 +75,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
+        robot.huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -171,6 +173,17 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             telemetry.addData("Wrist Pos:", "%f", robot.wrist.getPosition());
             telemetry.addData("LF", "%d", robot.leftBack.getCurrentPosition());
             telemetry.addData("Angle:", "%f", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.update();
+
+            HuskyLens.Block[] blocks = robot.huskyLens.blocks();
+            telemetry.addData("Block count", blocks.length);
+            for (int i = 0; i < blocks.length; i++) {
+//                int thisColorID = blocks[i].id;
+//                telemetry.addData("This Color ID", thisColorID);
+                telemetry.addData("Block", blocks[i].toString());
+                telemetry.addData("Block Pixel Width:", blocks[i].width);
+            }
+
             telemetry.update();
         }
     }
