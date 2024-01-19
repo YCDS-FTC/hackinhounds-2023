@@ -75,7 +75,6 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
-        robot.huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -135,29 +134,28 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 //                }
 //            }
 
-            double slidePower = -gamepad2.left_stick_y;
+            double slidePower = gamepad2.left_stick_y;
             int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((slidePower > 0.3) && (slideCurrentPos < 11600)) {
+            if ((slidePower < -0.1) && (slideCurrentPos > -11000)) {
                 robot.slide.setPower(slidePower);
-            } else if ((slidePower < -0.3) && (slideCurrentPos > 50)) {
+            } else if ((slidePower > 0.1) && (slideCurrentPos < -50)) {
                 robot.slide.setPower(slidePower);
             } else {
                 robot.slide.setPower(0);
             }
 
 
-
             double wristPower = gamepad2.right_stick_y * 0.01;
-            robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.2, 0.5));
+            robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.5, 0.8));
 
             if (gamepad2.right_trigger >= 0.1) {
-                robot.top_claw.setPosition(0);
+                robot.top_claw.setPosition(1);
             }
             if (gamepad2.right_bumper) {
                 robot.top_claw.setPosition(0.5);
             }
             if (gamepad2.left_trigger >= 0.1) {
-                robot.bottom_claw.setPosition(1);
+                robot.bottom_claw.setPosition(0);
             }
             if (gamepad2.left_bumper) {
                 robot.bottom_claw.setPosition(0.5);
@@ -168,22 +166,11 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
 
             //Telemetry
-            telemetry.addData("Right stick:", "%f", -gamepad2.left_stick_y);
+            telemetry.addData("Right stick:", "%f", gamepad2.left_stick_y);
             telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
             telemetry.addData("Wrist Pos:", "%f", robot.wrist.getPosition());
             telemetry.addData("LF", "%d", robot.leftBack.getCurrentPosition());
             telemetry.addData("Angle:", "%f", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            telemetry.update();
-
-            HuskyLens.Block[] blocks = robot.huskyLens.blocks();
-            telemetry.addData("Block count", blocks.length);
-            for (int i = 0; i < blocks.length; i++) {
-//                int thisColorID = blocks[i].id;
-//                telemetry.addData("This Color ID", thisColorID);
-                telemetry.addData("Block", blocks[i].toString());
-                telemetry.addData("Block Pixel Width:", blocks[i].width);
-            }
-
             telemetry.update();
         }
     }

@@ -101,8 +101,8 @@ public class HackinHoundsHardware extends Hardware {
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         wrist = robotMap.get(Servo.class, "wrist");
-        top_claw = robotMap.get(Servo.class, "top_claw");
-        bottom_claw = robotMap.get(Servo.class, "bottom_claw");
+        bottom_claw = robotMap.get(Servo.class, "top_claw");
+        top_claw = robotMap.get(Servo.class, "bottom_claw");
 
         huskyLens = robotMap.get(HuskyLens.class, "huskylens");
 

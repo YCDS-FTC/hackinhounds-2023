@@ -68,19 +68,17 @@ public class Reposition extends Command {
             } else {
                 measure = robot.rangeSensor.getDistance(DistanceUnit.INCH);
                 if (measure > distance + 2) {
-                    if (measure < distance - 2) {
-                        setState(ENDING);
-                    } else {
-                        robot.leftFront.setPower(-powerLevel);
-                        robot.leftBack.setPower(powerLevel);
-                        robot.rightFront.setPower(powerLevel);
-                        robot.rightBack.setPower(-powerLevel);
-                    }
-                } else {
                     robot.leftFront.setPower(powerLevel);
                     robot.leftBack.setPower(-powerLevel);
                     robot.rightFront.setPower(-powerLevel);
                     robot.rightBack.setPower(powerLevel);
+                } else if (measure < distance - 2) {
+                    robot.leftFront.setPower(-powerLevel);
+                    robot.leftBack.setPower(powerLevel);
+                    robot.rightFront.setPower(powerLevel);
+                    robot.rightBack.setPower(-powerLevel);
+                } else {
+                    setState(ENDING);
                 }
             }
         }

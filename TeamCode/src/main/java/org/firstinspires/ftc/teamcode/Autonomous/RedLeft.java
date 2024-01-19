@@ -62,7 +62,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "RedLeftAuto")
+@Autonomous(name = "OldStuff")
 public class RedLeft extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time
