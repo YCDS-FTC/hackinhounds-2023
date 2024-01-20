@@ -132,6 +132,7 @@ public class Blue_Left extends LinearOpMode {
             }
         }
         telemetry.update();
+        robot.launcher.setPosition(0.7);
 
         steps.add(new SetClaws(robot, runtime, 1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
@@ -150,9 +151,9 @@ public class Blue_Left extends LinearOpMode {
             steps.add(new SetClaws(robot, runtime, 1, "bottom", 0));
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
         } else if (propPos == 2) {
-            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+            steps.add(new MoveForDistance(robot, 7, 1, 1, runtime, 5, 0.5, 1));
             steps.add(new SetClaws(robot, runtime, 1, "bottom", 0));
-            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+            steps.add(new MoveForDistance(robot, 7, 1, 1, runtime, 5, -0.5, 1));
         } else if (propPos == 3) {
             steps.add(new TurnByAngle(robot, runtime, 45, 0.5, 5));
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
@@ -160,7 +161,7 @@ public class Blue_Left extends LinearOpMode {
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
         }
 
-        steps.add(new TurnByAngle(robot, runtime, -90, 0.5, 5));
+        steps.add(new TurnByAngle(robot, runtime, -90, 0.2, 5));
 
         steps.add(new Reposition(robot, runtime, 30, 5, -0.3));
 
@@ -168,7 +169,6 @@ public class Blue_Left extends LinearOpMode {
 
         steps.add(new SlideToPosition(robot, runtime, -2000, 1, 5));
 
-        steps.add(new MoveForDistance(robot, 30, 5, 5, runtime, 5, 0.5, 1));
 
         if (propPos == 1) {
             steps.add(new Reposition(robot, runtime, 25, 5, -0.3));
@@ -178,11 +178,18 @@ public class Blue_Left extends LinearOpMode {
             steps.add(new Reposition(robot, runtime, 35, 5, -0.3));
         }
 
-        steps.add(new SetClaws(robot, runtime, 1, "top", 0));
+        steps.add(new MoveForDistance(robot, 30, 5, 5, runtime, 5, 0.5, 1));
+
+        sleep(1000);
+
+        steps.add(new SetClaws(robot, runtime, 1, "top", 1));
 
         steps.add(new MoveForDistance(robot, 3, 0, 0, runtime, 3, -0.3, 1));
 
         steps.add(new SetWrist(robot, runtime, 1, 0.3));
+
+        steps.add(new SetClaws(robot, runtime, 1, "top", 0.5));
+        steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
 
         steps.add(new SlideToPosition(robot, runtime, 0, 0.5, 5));
 

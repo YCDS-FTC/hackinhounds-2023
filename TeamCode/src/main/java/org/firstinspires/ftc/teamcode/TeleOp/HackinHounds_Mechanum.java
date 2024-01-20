@@ -70,8 +70,8 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     double shift = 1;
     boolean slideMoving = false;
     boolean wristMoving = false;
+    boolean hold = true;
     int currentPos = 0;
-
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -80,7 +80,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-
+        robot.launcher.setPosition(0.7);
         while (opModeIsActive()) {
             if (gamepad1.y) {
                 shift = 1;
@@ -138,7 +138,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             int slideCurrentPos = robot.slide.getCurrentPosition();
             if ((slidePower < -0.1) && (slideCurrentPos > -11000)) {
                 robot.slide.setPower(slidePower);
-            } else if ((slidePower > 0.1) && (slideCurrentPos < -50)) {
+            } else if ((slidePower > 0.1) && (slideCurrentPos < -30)) {
                 robot.slide.setPower(slidePower);
             } else {
                 robot.slide.setPower(0);
@@ -149,13 +149,13 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.5, 0.8));
 
             if (gamepad2.right_trigger >= 0.1) {
-                robot.top_claw.setPosition(1);
+                robot.top_claw.setPosition(0.75);
             }
             if (gamepad2.right_bumper) {
                 robot.top_claw.setPosition(0.5);
             }
             if (gamepad2.left_trigger >= 0.1) {
-                robot.bottom_claw.setPosition(0);
+                robot.bottom_claw.setPosition(0.15);
             }
             if (gamepad2.left_bumper) {
                 robot.bottom_claw.setPosition(0.5);
@@ -165,10 +165,20 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                 robot.imu.resetYaw();
             }
 
+            if (hold == true) {
+//                robot.launcher.setPosition(0.8);
+                hold = false;
+            }
+
+            if (gamepad2.back) {
+                robot.launcher.setPosition(0.3);
+            }
+
             //Telemetry
             telemetry.addData("Right stick:", "%f", gamepad2.left_stick_y);
             telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
             telemetry.addData("Wrist Pos:", "%f", robot.wrist.getPosition());
+            telemetry.addData("Launcher Pos:", "%f", robot.launcher.getPosition());
             telemetry.addData("LF", "%d", robot.leftBack.getCurrentPosition());
             telemetry.addData("Angle:", "%f", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             telemetry.update();

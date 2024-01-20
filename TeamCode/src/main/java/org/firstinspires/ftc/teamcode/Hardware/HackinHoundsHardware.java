@@ -41,6 +41,7 @@ public class HackinHoundsHardware extends Hardware {
     public Servo wrist;
     public Servo top_claw;
     public Servo bottom_claw;
+    public Servo launcher;
     public HuskyLens huskyLens;
     public ModernRoboticsI2cRangeSensor rangeSensor;
 
@@ -103,6 +104,7 @@ public class HackinHoundsHardware extends Hardware {
         wrist = robotMap.get(Servo.class, "wrist");
         bottom_claw = robotMap.get(Servo.class, "top_claw");
         top_claw = robotMap.get(Servo.class, "bottom_claw");
+        launcher = robotMap.get(Servo.class, "launcher");
 
         huskyLens = robotMap.get(HuskyLens.class, "huskylens");
 

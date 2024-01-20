@@ -73,8 +73,8 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "BlueRight")
-public class Blue_Right extends LinearOpMode {
+@Autonomous(name = "RedLeft")
+public class Red_Left extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time
     private ElapsedTime runtime = new ElapsedTime();
@@ -101,7 +101,7 @@ public class Blue_Right extends LinearOpMode {
             }
             telemetry.addLine("On the right");
             for (int i = 0; i < blocks.length; i++) {
-                if (blocks[i].id == 2 && blocks[i].y > 120) {
+                if (blocks[i].id == 1 && blocks[i].y > 120) {
                     if (blocks[i].x > 160 ) {
                         propPos = 2;
                         telemetry.addLine("On the Middle");
@@ -118,7 +118,8 @@ public class Blue_Right extends LinearOpMode {
         propPos = 3;
         telemetry.addLine("On the right");
         for (int i = 0; i < blocks.length; i++) {
-            if (blocks[i].id == 2 && blocks[i].y > 120) {
+            if (blocks[i].id == 1 && blocks[i].y > 120) {
+
                 if (blocks[i].x > 160 ) {
                     propPos = 2;
                     telemetry.addLine("On the Middle");
@@ -138,7 +139,7 @@ public class Blue_Right extends LinearOpMode {
 
         steps.add(new MoveForDistance(robot, 2, 0, 0, runtime, 5, 0.5, 1));
 
-        steps.add(new StrafeForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+        steps.add(new StrafeForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
 
         steps.add(new MoveForDistance(robot, 30, 5, 5, runtime, 5, 0.5, 1));
 
@@ -163,11 +164,11 @@ public class Blue_Right extends LinearOpMode {
 
         steps.add(new MoveForDistance(robot, 24, 5, 5, runtime, 5, 0.5, 1));
 
-        steps.add(new StrafeForDistance(robot, 50, 10, 10, runtime, 10, -0.5, 1));
+        steps.add(new StrafeForDistance(robot, 50, 10, 10, runtime, 10, 0.5, 1));
 
-        steps.add(new Reposition(robot, runtime, 40, 5, -0.3));
+        steps.add(new Reposition(robot, runtime, 40, 5, 0.3));
 
-        steps.add(new TurnByAngle(robot, runtime, -90, 0.5, 5));
+        steps.add(new TurnByAngle(robot, runtime, 90, 0.5, 5));
 
         sleep(5000);
 
@@ -175,16 +176,16 @@ public class Blue_Right extends LinearOpMode {
 
         steps.add(new SlideToPosition(robot, runtime, -2000, 0.5, 5, true, false));
 
-        steps.add(new Reposition(robot, runtime, 30, 5, -0.5));
+        steps.add(new Reposition(robot, runtime, 30, 5, 0.5));
 
-        steps.add(new MoveForDistance(robot, 15, 3, 3, runtime, 5, -0.5, 1));
+        steps.add(new MoveForDistance(robot, 15, 3, 3, runtime, 5, 0.5, 1));
 
         if (propPos == 1) {
-            steps.add(new Reposition(robot, runtime, 25, 5, -0.3));
+            steps.add(new Reposition(robot, runtime, 25, 5, 0.3));
         } else if (propPos == 2) {
-            steps.add(new Reposition(robot, runtime, 30, 5, -0.3));
+            steps.add(new Reposition(robot, runtime, 30, 5, 0.3));
         } else {
-            steps.add(new Reposition(robot, runtime, 35, 5, -0.3));
+            steps.add(new Reposition(robot, runtime, 35, 5, 0.3));
         }
 
         steps.add(new SetClaws(robot, runtime, 1, "top", 1));
@@ -198,7 +199,7 @@ public class Blue_Right extends LinearOpMode {
 
         steps.add(new SlideToPosition(robot, runtime, 0, 0.5, 5, true, false));
 
-        steps.add(new Reposition(robot, runtime, 10, 5, -0.3));
+        steps.add(new Reposition(robot, runtime, 10, 5, 0.3));
 
         // This is where we build the autonomous routine
         Command currentStep = steps.get(step);

@@ -63,7 +63,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
  */
 
 @Autonomous(name = "OldStuff")
-public class RedLeft extends LinearOpMode {
+public class oldCode extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time
     private ElapsedTime runtime = new ElapsedTime();
