@@ -80,7 +80,6 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-        robot.launcher.setPosition(0.7);
         while (opModeIsActive()) {
             if (gamepad1.y) {
                 shift = 1;
@@ -136,9 +135,9 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
             double slidePower = gamepad2.left_stick_y;
             int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((slidePower < -0.1) && (slideCurrentPos > -11000)) {
+            if ((slidePower > 0.1) && (slideCurrentPos > -11000)) {
                 robot.slide.setPower(slidePower);
-            } else if ((slidePower > 0.1) && (slideCurrentPos < -30)) {
+            } else if ((slidePower < -0.1) && (slideCurrentPos < 0)) {
                 robot.slide.setPower(slidePower);
             } else {
                 robot.slide.setPower(0);
@@ -166,7 +165,8 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
 
             if (hold == true) {
-//                robot.launcher.setPosition(0.8);
+                robot.launcher.setPosition(0.7);
+                robot.wrist.setPosition(0.5);
                 hold = false;
             }
 

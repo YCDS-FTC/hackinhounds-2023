@@ -41,6 +41,7 @@ import org.firstinspires.ftc.teamcode.AutonCommands.SetWrist;
 import org.firstinspires.ftc.teamcode.AutonCommands.SlideToPosition;
 import org.firstinspires.ftc.teamcode.AutonCommands.StrafeForDistance;
 import org.firstinspires.ftc.teamcode.AutonCommands.TurnByAngle;
+import org.firstinspires.ftc.teamcode.AutonCommands.WaitForTime;
 import org.firstinspires.ftc.teamcode.Hardware.Command;
 import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
 
@@ -101,7 +102,7 @@ public class Red_Right extends LinearOpMode {
             }
             telemetry.addLine("On the right");
             for (int i = 0; i < blocks.length; i++) {
-                if (blocks[i].id == 1 && blocks[i].y > 120) {
+                if (blocks[i].id == 1 && blocks[i].y > 100) {
                     if (blocks[i].x > 160 ) {
                         propPos = 2;
                         telemetry.addLine("On the Middle");
@@ -118,7 +119,7 @@ public class Red_Right extends LinearOpMode {
         propPos = 3;
         telemetry.addLine("On the right");
         for (int i = 0; i < blocks.length; i++) {
-            if (blocks[i].id == 1 && blocks[i].y > 120) {
+            if (blocks[i].id == 1 && blocks[i].y > 100) {
                 if (blocks[i].x > 160 ) {
                     propPos = 2;
                     telemetry.addLine("On the Middle");
@@ -131,66 +132,76 @@ public class Red_Right extends LinearOpMode {
         telemetry.update();
         robot.launcher.setPosition(0.7);
 
-        steps.add(new SetClaws(robot, runtime, 1, "top", 0.5));
+        steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
 
-        steps.add(new SetWrist(robot, runtime, 1, 0.8));
+        steps.add(new SetWrist(robot, runtime, 1, 0.6));
 
         steps.add(new MoveForDistance(robot, 2, 0, 0, runtime, 5, 0.5, 1));
 
-        steps.add(new StrafeForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+        steps.add(new StrafeForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
 
         steps.add(new MoveForDistance(robot, 20, 5, 5, runtime, 5, 0.5, 1));
 
         if (propPos == 1) {
             steps.add(new TurnByAngle(robot, runtime, -45, 0.5, 5));
-            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+            steps.add(new MoveForDistance(robot, 8, 1, 1, runtime, 5, 0.5, 1));
+            steps.add(new MoveForDistance(robot, 2, 1, 1, runtime, 5, -0.5, 1));
+            steps.add(new WaitForTime(robot, runtime, 1));
             steps.add(new SetClaws(robot, runtime, 1, "bottom", 0));
-            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+            steps.add(new MoveForDistance(robot, 6, 1, 1, runtime, 5, -0.5, 1));
         } else if (propPos == 2) {
             steps.add(new MoveForDistance(robot, 7, 1, 1, runtime, 5, 0.5, 1));
-            steps.add(new SetClaws(robot, runtime, 1, "bottom", 0));
-            steps.add(new MoveForDistance(robot, 7, 1, 1, runtime, 5, -0.5, 1));
-        } else if (propPos == 3) {
-            steps.add(new TurnByAngle(robot, runtime, 45, 0.5, 5));
-            steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+            steps.add(new WaitForTime(robot, runtime, 1));
             steps.add(new SetClaws(robot, runtime, 1, "bottom", 0));
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+        } else if (propPos == 3) {
+            steps.add(new TurnByAngle(robot, runtime, 45, 0.5, 5));
+            steps.add(new MoveForDistance(robot, 8, 1, 1, runtime, 5, 0.5, 1));
+            steps.add(new MoveForDistance(robot, 2, 1, 1, runtime, 5, -0.5, 1));
+            steps.add(new WaitForTime(robot, runtime, 1));
+            steps.add(new SetClaws(robot, runtime, 1, "bottom", 0));
+            steps.add(new MoveForDistance(robot, 6, 1, 1, runtime, 5, -0.5, 1));
         }
 
         steps.add(new TurnByAngle(robot, runtime, 90, 0.2, 5));
 
-        steps.add(new Reposition(robot, runtime, 30, 5, 0.3));
+        steps.add(new Reposition(robot, runtime, 20, 5, 0.3));
 
-        steps.add(new SetWrist(robot, runtime, 1, 0.5));
+        steps.add(new SetWrist(robot, runtime, 0.1, 0.5));
 
         steps.add(new SlideToPosition(robot, runtime, -2000, 1, 5));
 
-
-        if (propPos == 1) {
-            steps.add(new Reposition(robot, runtime, 35, 5, 0.3));
-        } else if (propPos == 2) {
-            steps.add(new Reposition(robot, runtime, 30, 5, 0.3));
-        } else {
-            steps.add(new Reposition(robot, runtime, 25, 5, 0.3));
-        }
-
         steps.add(new MoveForDistance(robot, 30, 5, 5, runtime, 5, 0.5, 1));
 
-        sleep(1000);
+        if (propPos == 1) {
+            steps.add(new Reposition(robot, runtime, 34, 5, 0.2));
+        } else if (propPos == 2) {
+            steps.add(new Reposition(robot, runtime, 26, 5, 0.2));
+        } else {
+            steps.add(new Reposition(robot, runtime, 20, 5, 0.2));
+        }
+
+        steps.add(new MoveForDistance(robot, 7, 2, 2, runtime, 5, 0.5, 1));
+
+        steps.add(new WaitForTime(robot, runtime, 1));
 
         steps.add(new SetClaws(robot, runtime, 1, "top", 1));
 
         steps.add(new MoveForDistance(robot, 3, 0, 0, runtime, 3, -0.3, 1));
 
-        steps.add(new SetWrist(robot, runtime, 1, 0.3));
+        steps.add(new SetWrist(robot, runtime, 1, 0.5));
 
-        steps.add(new SetClaws(robot, runtime, 1, "top", 0.5));
-        steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
+        steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
+        steps.add(new SetClaws(robot, runtime, 0.1, "bottom", 0.5));
 
         steps.add(new SlideToPosition(robot, runtime, 0, 0.5, 5));
 
-        steps.add(new Reposition(robot, runtime, 10, 5, 0.3));
+        steps.add(new Reposition(robot, runtime, 50, 5, 0.3));
+
+        steps.add(new TurnByAngle(robot, runtime, 1, 0.2, 5));
+
+        steps.add(new Reposition(robot, runtime, 5, 5, 0.3));
 
         // This is where we build the autonomous routine
         Command currentStep = steps.get(step);

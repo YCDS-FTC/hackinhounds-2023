@@ -61,7 +61,7 @@ public class TurnByAngle extends Command {
             double currentAngle = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
             // Gyro angle gets more negative turning right, but user angles are positive turning right
             double angleError = desiredAngle-currentAngle;
-            while (Math.abs(angleError) > 0.5 && elapsedTime < timeOut) {
+            if (Math.abs(angleError) > 0.5 && elapsedTime < timeOut) {
                 //turnSign = Math.signum(angleError);
                 currentAngle = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
                 angleError = desiredAngle-currentAngle;
@@ -71,8 +71,9 @@ public class TurnByAngle extends Command {
                 robot.rightFront.setPower(-turnSign*powerLevel*powerFactor);
                 robot.leftBack.setPower(turnSign*powerLevel*powerFactor);
                 robot.rightBack.setPower(-turnSign*powerLevel*powerFactor);
+            } else {
+                setState(ENDING);
             }
-            setState(ENDING);
         }
     }
 
