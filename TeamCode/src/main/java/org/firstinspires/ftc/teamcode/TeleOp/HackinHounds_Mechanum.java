@@ -72,6 +72,14 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     boolean wristMoving = false;
     boolean hold = true;
     int currentPos = 0;
+
+    //PID Stuff
+    double integralSum = 0;
+    double Kp = 10;
+    double Ki = 0;
+    double Kd = 0;
+    double lasterror = 0;
+
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -133,14 +141,28 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 //                }
 //            }
 
-            double slidePower = gamepad2.left_stick_y;
+            double slidePower = -gamepad2.left_stick_y;
             int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((slidePower > 0.1) && (slideCurrentPos > -11000)) {
+            if ((slidePower > 0.1) && (slideCurrentPos < 8000)) {
                 robot.slide.setPower(slidePower);
-            } else if ((slidePower < -0.1) && (slideCurrentPos < 0)) {
+            } else if ((slidePower < -0.1) && (slideCurrentPos > 0)) {
                 robot.slide.setPower(slidePower);
             } else {
-                robot.slide.setPower(0);
+                if (!slideMoving) {
+                    robot.slide.setPower(0);
+                }
+            }
+
+
+            if (gamepad2.dpad_up) {
+                slideMoving = true;
+            }
+
+            if (slideMoving) {
+                robot.slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                robot.wrist.setPosition(0.5);
+                double power = PIDControl(1000, robot.slide.getVelocity());
+                robot.slide.setPower(power);
             }
 
 
@@ -175,8 +197,9 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
 
             //Telemetry
-            telemetry.addData("Right stick:", "%f", gamepad2.left_stick_y);
+            telemetry.addData("Left stick:", "%f", gamepad2.left_stick_y);
             telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
+            telemetry.addData("slide Volocity:", "%f", robot.slide.getVelocity());
             telemetry.addData("Wrist Pos:", "%f", robot.wrist.getPosition());
             telemetry.addData("Launcher Pos:", "%f", robot.launcher.getPosition());
             telemetry.addData("LF", "%d", robot.leftBack.getCurrentPosition());
@@ -187,5 +210,15 @@ public class HackinHounds_Mechanum extends LinearOpMode {
     private double clamp(double x, double min, double max) {
 
         return Math.max(min,Math.min(max,x));
+    }
+    private double PIDControl (double reference, double state) {
+        double error = reference - state;
+        integralSum += error * runtime.seconds();
+        double derivitive = (error - lasterror) / runtime.seconds();
+        lasterror = error;
+        runtime.reset();
+
+        double output = (error * Kp) + (derivitive * Kd) + (integralSum * Ki);
+        return output;
     }
 }
