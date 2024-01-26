@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -75,16 +76,25 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
     //PID Stuff
     double integralSum = 0;
-    double Kp = 10;
-    double Ki = 0;
-    double Kd = 0;
+    double Kp = 25;    // default 10
+    double Ki = 3;     // default 3
+    double Kd = 0.1;   // default 0
+    double Kf = 0;     // default 0
     double lasterror = 0;
+
+    PIDFCoefficients pidOld;
+    PIDFCoefficients pidNew;
 
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        pidOld = robot.slide.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("P,I,D,F", "%.04f, %.04f, %.04f, %.04f", pidOld.p, pidOld.i, pidOld.d, pidOld.f);
+        telemetry.update();
+        pidNew = new PIDFCoefficients(Kp, Ki, Kd, Kf);
+        robot.slide.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         waitForStart();
         runtime.reset();
@@ -148,21 +158,21 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             } else if ((slidePower < -0.1) && (slideCurrentPos > 0)) {
                 robot.slide.setPower(slidePower);
             } else {
-                if (!slideMoving) {
+                if (slideMoving == false) {
                     robot.slide.setPower(0);
                 }
             }
-
 
             if (gamepad2.dpad_up) {
                 slideMoving = true;
             }
 
             if (slideMoving) {
-                robot.slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                robot.wrist.setPosition(0.5);
-                double power = PIDControl(1000, robot.slide.getVelocity());
-                robot.slide.setPower(power);
+                robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.slide.setTargetPosition(3000);
+                robot.slide.setPower(1);
+//                double power = PIDControl(1000, robot.slide.getVelocity());
+//                robot.slide.setPower(-power);
             }
 
 
@@ -170,7 +180,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.5, 0.8));
 
             if (gamepad2.right_trigger >= 0.1) {
-                robot.top_claw.setPosition(0.75);
+                robot.top_claw.setPosition(0.82);
             }
             if (gamepad2.right_bumper) {
                 robot.top_claw.setPosition(0.5);
@@ -211,6 +221,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
         return Math.max(min,Math.min(max,x));
     }
+
     private double PIDControl (double reference, double state) {
         double error = reference - state;
         integralSum += error * runtime.seconds();
