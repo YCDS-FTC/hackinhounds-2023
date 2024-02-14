@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -63,6 +64,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
  */
 
 @Autonomous(name = "OldStuff")
+@Disabled
 public class oldCode extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time

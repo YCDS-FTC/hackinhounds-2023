@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -18,11 +19,13 @@ public class VisionTestHardware extends Hardware {
     public static final int READ_PERIOD = 1;
     public DistanceSensor sensorDistance;
     public HuskyLens huskyLens;
+    public DcMotorEx slide;
     public ModernRoboticsI2cRangeSensor rangeSensor;
 
     public void init(HardwareMap hwMap) {
         robotMap = hwMap;
         huskyLens = robotMap.get(HuskyLens.class, "huskylens");
+        //slide = robotMap.get(DcMotorEx.class, "slide");
     }
 
 }

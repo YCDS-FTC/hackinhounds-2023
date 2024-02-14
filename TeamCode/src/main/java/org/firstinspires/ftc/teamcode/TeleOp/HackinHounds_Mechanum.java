@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -43,9 +44,12 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
+
+import java.util.IllegalFormatException;
 
 
 
@@ -76,9 +80,9 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
     //PID Stuff
     double integralSum = 0;
-    double Kp = 25;    // default 10
+    double Kp = 10;    // default 10
     double Ki = 3;     // default 3
-    double Kd = 0.1;   // default 0
+    double Kd = 0;   // default 0
     double Kf = 0;     // default 0
     double lasterror = 0;
 
@@ -98,6 +102,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
+        robot.colorSensor.enableLed(false);
         while (opModeIsActive()) {
             if (gamepad1.y) {
                 shift = 1;
@@ -151,11 +156,15 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 //                }
 //            }
 
-            double slidePower = -gamepad2.left_stick_y;
+            double slidePower = gamepad2.left_stick_y;
             int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((slidePower > 0.1) && (slideCurrentPos < 8000)) {
+            if ((slidePower < -0.1) && (slideCurrentPos > -11000)) {
+                robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                slideMoving = false;
                 robot.slide.setPower(slidePower);
-            } else if ((slidePower < -0.1) && (slideCurrentPos > 0)) {
+            } else if ((slidePower > 0.1) && (slideCurrentPos < 0)) {
+                robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                slideMoving = false;
                 robot.slide.setPower(slidePower);
             } else {
                 if (slideMoving == false) {
@@ -165,28 +174,36 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
             if (gamepad2.dpad_up) {
                 slideMoving = true;
+                robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.slide.setTargetPosition(5);
+                robot.wrist.setPosition(0.84);
             }
 
             if (slideMoving) {
-                robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.slide.setTargetPosition(3000);
-                robot.slide.setPower(1);
+                if ((robot.slide.getCurrentPosition() >= robot.slide.getTargetPosition() - 30) && (robot.slide.getCurrentPosition() <= robot.slide.getTargetPosition() + 30)) {
+                    robot.slide.setPower(0.03);
+                } else {
+                    robot.slide.setPower(1);
+                }
 //                double power = PIDControl(1000, robot.slide.getVelocity());
 //                robot.slide.setPower(-power);
             }
 
 
-            double wristPower = gamepad2.right_stick_y * 0.01;
-            robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.5, 0.8));
+            double wristPower = gamepad2.right_stick_y * 0.05;
+            //Was originally 0.6, 0.84
+            // max value specifies how far DOWN the claw moves -- at 0.5, the claw is parallel to the floor
+            // min value specifies how far UP the claw moves -- at 0.25 the claw is about parallel to the backboard
+            robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.26, 0.54));
 
             if (gamepad2.right_trigger >= 0.1) {
-                robot.top_claw.setPosition(0.82);
+                robot.top_claw.setPosition(0.78);
             }
             if (gamepad2.right_bumper) {
                 robot.top_claw.setPosition(0.5);
             }
             if (gamepad2.left_trigger >= 0.1) {
-                robot.bottom_claw.setPosition(0.15);
+                robot.bottom_claw.setPosition(0.20);
             }
             if (gamepad2.left_bumper) {
                 robot.bottom_claw.setPosition(0.5);
@@ -197,14 +214,40 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
 
             if (hold == true) {
-                robot.launcher.setPosition(0.7);
-                robot.wrist.setPosition(0.5);
+                robot.launcher.setPosition(0);
+                robot.wrist.setPosition(0.84);
                 hold = false;
             }
 
             if (gamepad2.back) {
-                robot.launcher.setPosition(0.3);
+                robot.launcher.setPosition(1);
             }
+
+            if (gamepad2.y) {
+                robot.hook.setPosition(1);
+            }
+
+            //Here is code for hanging mechanism
+
+            if (gamepad2.x) {
+                robot.hook.setPosition(1);
+            }
+
+            if (gamepad2.y) {
+                robot.hook.setPosition(0.6);
+            }
+
+            if (gamepad2.a) {
+//                robot.spool.setPower(1);
+                robot.spool.setVelocity(3000);
+            } else {
+//                robot.spool.setPower(0);
+                robot.spool.setVelocity(0);
+            }
+
+//            if (robot.distance.getDistance(DistanceUnit.MM) < 10) {
+//                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_RED);
+//            }
 
             //Telemetry
             telemetry.addData("Left stick:", "%f", gamepad2.left_stick_y);
@@ -213,23 +256,16 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             telemetry.addData("Wrist Pos:", "%f", robot.wrist.getPosition());
             telemetry.addData("Launcher Pos:", "%f", robot.launcher.getPosition());
             telemetry.addData("LF", "%d", robot.leftBack.getCurrentPosition());
-            telemetry.addData("Angle:", "%f", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.addData("Angle:", "%f", robot.getAngle());
+            telemetry.addData("ColorRed:", "%d", robot.colorSensor.red());
+            telemetry.addData("ColorGreen:", "%d", robot.colorSensor.green());
+            telemetry.addData("ColorBlue:", "%d", robot.colorSensor.blue());
+            telemetry.addLine("if you like to talk to tomatos, if a squash can make you smile. if you like to waltz with potatoes up and down the produce aisle, have we got a show for you");
             telemetry.update();
         }
     }
     private double clamp(double x, double min, double max) {
 
         return Math.max(min,Math.min(max,x));
-    }
-
-    private double PIDControl (double reference, double state) {
-        double error = reference - state;
-        integralSum += error * runtime.seconds();
-        double derivitive = (error - lasterror) / runtime.seconds();
-        lasterror = error;
-        runtime.reset();
-
-        double output = (error * Kp) + (derivitive * Kd) + (integralSum * Ki);
-        return output;
     }
 }

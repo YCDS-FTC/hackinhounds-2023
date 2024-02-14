@@ -3,12 +3,11 @@ package org.firstinspires.ftc.teamcode.AutonCommands;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Command;
 import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 
-public class TurnByAngle extends Command {
+public class TurnAndSlide extends Command {
     private ElapsedTime timer;
     private double startTime;
     private double timeOut;
@@ -17,13 +16,13 @@ public class TurnByAngle extends Command {
     private double desiredAngle;
     private double deltaAngle;
     double turnSign;
+    boolean slideDone = false;
+    int position;
+    double sPowerLevel;
 
-    public TurnByAngle(Hardware robot, ElapsedTime timer, double deltaAngle, double powerLevel, double timeOut) {
+    public TurnAndSlide(Hardware robot, ElapsedTime timer, double heading, double powerLevel, double timeOut, int position, double sPowerLevel) {
         super(robot);
         this.robot = (HackinHoundsHardware) getRobot();
-
-        // turnSign is positive for right turn
-        turnSign = Math.signum(deltaAngle);
         //testRobot.resetAngle();
         this.timer = timer;
         if (timeOut < 0) {
@@ -31,7 +30,9 @@ public class TurnByAngle extends Command {
         }
         this.timeOut = timeOut*1000;
         this.powerLevel = powerLevel;
-        this.deltaAngle = deltaAngle;
+        this.sPowerLevel = sPowerLevel;
+        this.desiredAngle = heading;
+        this.position = position;
         setState(STARTING);
     }
 
@@ -48,9 +49,7 @@ public class TurnByAngle extends Command {
             robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             // Right turn (positive delta) is negative direction for gyro
-            //this.desiredAngle = robot.getAngle()-deltaAngle;  //  BY ANGLE
-            this.desiredAngle = -deltaAngle;    // TO ANGLE
-
+            this.turnSign = Math.signum(desiredAngle - robot.getAngle());
             setState(RUNNING);
         }
     }
@@ -58,21 +57,37 @@ public class TurnByAngle extends Command {
     public void run() {
         if (getState() == RUNNING) {
             double elapsedTime = timer.milliseconds()-startTime;
-            double currentAngle = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-            // Gyro angle gets more negative turning right, but user angles are positive turning right
-            double angleError = desiredAngle-currentAngle;
-            if (Math.abs(angleError) > 0.5 && elapsedTime < timeOut) {
-                //turnSign = Math.signum(angleError);
-                currentAngle = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-                angleError = desiredAngle-currentAngle;
-                double powerFactor = Math.min((-turnSign*angleError)/45.0+0.1,1.0);
-                // turnSign = 1 is right turn
-                robot.leftFront.setPower(turnSign*powerLevel*powerFactor);
-                robot.rightFront.setPower(-turnSign*powerLevel*powerFactor);
-                robot.leftBack.setPower(turnSign*powerLevel*powerFactor);
-                robot.rightBack.setPower(-turnSign*powerLevel*powerFactor);
+            double currentAngle = robot.getAngle();
+            double angleError = desiredAngle - currentAngle;
+            if (Math.abs(robot.slide.getCurrentPosition()-position) > 10) {
+                robot.slide.setTargetPosition(position);
+                robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.slide.setPower(sPowerLevel);
             } else {
-                setState(ENDING);
+                robot.slide.setPower(0);
+                slideDone = true;
+            }
+            if (turnSign * angleError > 0 && elapsedTime < timeOut) {
+                double powerFactor = Math.min(Math.abs((turnSign*angleError)/45.0),1.0);
+//                if (turnSign >= 0) {
+                    robot.leftFront.setPower(-turnSign*powerLevel*powerFactor);
+                    robot.rightFront.setPower(turnSign*powerLevel*powerFactor);
+                    robot.leftBack.setPower(-turnSign*powerLevel*powerFactor);
+                    robot.rightBack.setPower(turnSign*powerLevel*powerFactor);
+//                } else {
+//                    robot.leftFront.setPower(-turnSign*powerLevel*powerFactor);
+//                    robot.rightFront.setPower(turnSign*powerLevel*powerFactor);
+//                    robot.leftBack.setPower(-turnSign*powerLevel*powerFactor);
+//                    robot.rightBack.setPower(turnSign*powerLevel*powerFactor);
+//                }
+            } else {
+                robot.leftFront.setPower(0);
+                robot.leftBack.setPower(0);
+                robot.rightFront.setPower(0);
+                robot.rightBack.setPower(0);
+                if (slideDone) {
+                    setState(ENDING);
+                }
             }
         }
     }

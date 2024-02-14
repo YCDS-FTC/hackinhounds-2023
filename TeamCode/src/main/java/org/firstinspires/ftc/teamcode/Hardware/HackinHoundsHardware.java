@@ -5,12 +5,18 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.LED;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -44,6 +50,11 @@ public class HackinHoundsHardware extends Hardware {
     public Servo launcher;
     public HuskyLens huskyLens;
     public ModernRoboticsI2cRangeSensor rangeSensor;
+    public ColorSensor colorSensor;
+    public Rev2mDistanceSensor distance;
+    public RevBlinkinLedDriver Lights;
+    public Servo hook;
+    public DcMotorEx spool;
 
     public IMU imu;
     public YawPitchRollAngles angles;
@@ -97,18 +108,29 @@ public class HackinHoundsHardware extends Hardware {
         //rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         slide = robotMap.get(DcMotorEx.class, "slide");
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        spool = robotMap.get(DcMotorEx.class, "spool");
+        spool.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        spool.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         wrist = robotMap.get(Servo.class, "wrist");
         bottom_claw = robotMap.get(Servo.class, "top_claw");
         top_claw = robotMap.get(Servo.class, "bottom_claw");
         launcher = robotMap.get(Servo.class, "launcher");
+        launcher = robotMap.get(Servo.class, "launcher");
+        hook = robotMap.get(Servo.class, "hook");
 
         huskyLens = robotMap.get(HuskyLens.class, "huskylens");
 
         rangeSensor = robotMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
+
+        colorSensor = robotMap.get(ColorSensor.class, "color");
+        distance = robotMap.get(Rev2mDistanceSensor.class, "distance");
+
+        //Lights = robotMap.get(RevBlinkinLedDriver.class, "lights");
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");
@@ -117,7 +139,10 @@ public class HackinHoundsHardware extends Hardware {
         RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logo, usb);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
-        imu.resetYaw();
+    }
+
+    public double getAngle() {
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 }
 
