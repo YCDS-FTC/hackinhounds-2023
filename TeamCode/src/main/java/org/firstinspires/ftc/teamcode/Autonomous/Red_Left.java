@@ -194,7 +194,11 @@ public class Red_Left extends LinearOpMode {
 
         steps.add(new TurnToHeading(robot, runtime, -90, 0.3, 2));
 
-        steps.add(new MoveForDistance(robot, 70, 10, 10, runtime, 5, 0.5, 1));
+        if (propPos == 3) {
+            steps.add(new MoveForDistance(robot, 75, 10, 10, runtime, 5, 0.5, 1));
+        } else {
+            steps.add(new MoveForDistance(robot, 70, 10, 10, runtime, 5, 0.5, 1));
+        }
 
         steps.add(new TurnToHeading(robot, runtime, -90, 0.5, 2));
 
@@ -225,7 +229,7 @@ public class Red_Left extends LinearOpMode {
         steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 0.1, "bottom", 0.5));
 
-        //steps.add(new SlideToPosition(robot, runtime, 0, 1, 3));
+        steps.add(new SlideToPosition(robot, runtime, 0, 1, 5));
 
 //        steps.add(new TurnToHeading(robot, runtime, 0, 0.5, 3));
 //

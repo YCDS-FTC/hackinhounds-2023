@@ -140,7 +140,7 @@ public class Blue_Right_close_side extends LinearOpMode {
         steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
 
-        steps.add(new SetWrist(robot, runtime, 1, 0.8));
+        steps.add(new SetWrist(robot, runtime, 1, 0.5));
 
         steps.add(new MoveForDistance(robot, 2, 0, 0, runtime, 5, 0.5, 1));
 
@@ -169,13 +169,13 @@ public class Blue_Right_close_side extends LinearOpMode {
             steps.add(new TurnToHeading(robot, runtime, -90, 0.5, 5));
             steps.add(new WaitForTime(robot, runtime, 0.5));
             steps.add(new SetClaws(robot, runtime, 0.5, "bottom", 0));
-            steps.add(new SetWrist(robot, runtime, 0.1, 0.6));
+            steps.add(new SetWrist(robot, runtime, 0.1, 0.26));
             steps.add(new MoveForDistance(robot, 2, 1, 1, runtime, 5, -0.5, 1));
             steps.add(new StrafeForDistance(robot, 30, 1, 1, runtime, 5, 0.5, 1));
             steps.add(new TurnToHeading(robot, runtime, 90, 0.5, 5));
         }
 
-        steps.add(new SetWrist(robot, runtime, 0.1, 0.6));
+        steps.add(new SetWrist(robot, runtime, 0.1, 0.26));
 
         steps.add(new Reposition(robot, runtime, 5, 5, -0.3));
 
@@ -203,18 +203,12 @@ public class Blue_Right_close_side extends LinearOpMode {
 
         steps.add(new MoveForDistance(robot, 7, 2, 2, runtime, 3, -0.5, 1));
 
-        steps.add(new SetWrist(robot, runtime, 1, 0.84));
+        steps.add(new SetWrist(robot, runtime, 1, 0.54));
 
         steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 0.1, "bottom", 0.5));
 
         steps.add(new SlideToPosition(robot, runtime, 0, 1, 3));
-
-        steps.add(new TurnToHeading(robot, runtime, 0, 0.5, 5));
-
-        steps.add(new ToBlueStrafe(robot, runtime, 2, -0.3));
-
-        steps.add(new TurnToHeading(robot, runtime, 0, 0.3, 2));
 
         // This is where we build the autonomous routine
         Command currentStep = steps.get(step);

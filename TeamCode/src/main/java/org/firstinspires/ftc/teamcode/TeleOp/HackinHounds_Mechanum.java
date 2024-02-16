@@ -238,15 +238,17 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
 
             if (gamepad2.a) {
-//                robot.spool.setPower(1);
-                robot.spool.setVelocity(3000);
+                robot.spool.setPower(1);
+                //robot.spool.setVelocity(3000);
             } else {
-//                robot.spool.setPower(0);
-                robot.spool.setVelocity(0);
+                robot.spool.setPower(0);
+                //robot.spool.setVelocity(0);
             }
 
 //            if (robot.distance.getDistance(DistanceUnit.MM) < 10) {
 //                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_RED);
+//            } else {
+//                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 //            }
 
             //Telemetry
