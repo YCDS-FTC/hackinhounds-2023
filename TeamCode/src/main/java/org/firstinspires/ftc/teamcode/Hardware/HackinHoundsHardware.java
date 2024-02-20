@@ -130,7 +130,7 @@ public class HackinHoundsHardware extends Hardware {
         colorSensor = robotMap.get(ColorSensor.class, "color");
         distance = robotMap.get(Rev2mDistanceSensor.class, "distance");
 
-        //Lights = robotMap.get(RevBlinkinLedDriver.class, "lights");
+        Lights = robotMap.get(RevBlinkinLedDriver.class, "lights");
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");

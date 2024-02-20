@@ -160,6 +160,7 @@ public class Red_Left extends LinearOpMode {
             steps.add(new MoveForDistance(robot, 4, 1, 1, runtime, 5, -0.3, 1));
             steps.add(new WaitForTime(robot, runtime, 0.5));
             steps.add(new SetClaws(robot, runtime, 0.5, "bottom", 0));
+
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
         } else if (propPos == 2) {
             steps.add(new TurnToHeading(robot, runtime, -90, 0.3, 2));
@@ -179,10 +180,10 @@ public class Red_Left extends LinearOpMode {
 //            steps.add(new MoveForDistance(robot, 10, 3, 3, runtime, 5, -0.5, 1));
         } else if (propPos == 1) {
             steps.add(new TurnToHeading(robot, runtime, 90, 0.5, 5));
-            steps.add(new MoveForDistance(robot, 1, 0, 0, runtime, 5, 0.3, 1));
+            //steps.add(new MoveForDistance(robot, 1, 0, 0, runtime, 5, 0.3, 1));
             steps.add(new WaitForTime(robot, runtime, 0.5));
             steps.add(new SetClaws(robot, runtime, 0.5, "bottom", 0));
-            steps.add(new SetWrist(robot, runtime, 0.1, 0.6));
+            steps.add(new SetWrist(robot, runtime, 0.1, 0.26));
             steps.add(new MoveForDistance(robot, 2, 1, 1, runtime, 5, -0.5, 1));
             steps.add(new StrafeForDistance(robot, 20, 1, 1, runtime, 5, 0.5, 1));
             steps.add(new TurnToHeading(robot, runtime, -90, 0.5, 5));
@@ -216,7 +217,7 @@ public class Red_Left extends LinearOpMode {
 
         steps.add(new ToRed(robot, runtime, 5, 0.3));
 
-        steps.add(new MoveForDistance(robot, 7, 2, 2, runtime, 5, 0.5, 1));
+        steps.add(new MoveForDistance(robot, 5, 2, 2, runtime, 5, 0.5, 1));
 
         steps.add(new TurnToHeading(robot, runtime, -90, 0.5, 2));
 
@@ -230,6 +231,8 @@ public class Red_Left extends LinearOpMode {
         steps.add(new SetClaws(robot, runtime, 0.1, "bottom", 0.5));
 
         steps.add(new SlideToPosition(robot, runtime, 0, 1, 5));
+
+        steps.add(new ToRed(robot, runtime, 5, 0.3));
 
 //        steps.add(new TurnToHeading(robot, runtime, 0, 0.5, 3));
 //

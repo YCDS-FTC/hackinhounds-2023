@@ -203,7 +203,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                 robot.top_claw.setPosition(0.5);
             }
             if (gamepad2.left_trigger >= 0.1) {
-                robot.bottom_claw.setPosition(0.20);
+                robot.bottom_claw.setPosition(0.15);
             }
             if (gamepad2.left_bumper) {
                 robot.bottom_claw.setPosition(0.5);
@@ -240,16 +240,18 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             if (gamepad2.a) {
                 robot.spool.setPower(1);
                 //robot.spool.setVelocity(3000);
+            } else if (gamepad2.b) {
+                robot.spool.setPower(-1);
             } else {
                 robot.spool.setPower(0);
                 //robot.spool.setVelocity(0);
             }
 
-//            if (robot.distance.getDistance(DistanceUnit.MM) < 10) {
-//                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_RED);
-//            } else {
-//                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-//            }
+            if (robot.distance.getDistance(DistanceUnit.MM) < 36) {
+                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
+            } else {
+                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_RED);
+            }
 
             //Telemetry
             telemetry.addData("Left stick:", "%f", gamepad2.left_stick_y);
@@ -262,6 +264,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             telemetry.addData("ColorRed:", "%d", robot.colorSensor.red());
             telemetry.addData("ColorGreen:", "%d", robot.colorSensor.green());
             telemetry.addData("ColorBlue:", "%d", robot.colorSensor.blue());
+            telemetry.addData("claw distance:", "%f", robot.distance.getDistance(DistanceUnit.MM) );
             telemetry.addLine("if you like to talk to tomatos, if a squash can make you smile. if you like to waltz with potatoes up and down the produce aisle, have we got a show for you");
             telemetry.update();
         }

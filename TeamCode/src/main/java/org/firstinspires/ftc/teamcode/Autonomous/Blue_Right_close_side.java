@@ -179,7 +179,7 @@ public class Blue_Right_close_side extends LinearOpMode {
 
         steps.add(new Reposition(robot, runtime, 5, 5, -0.3));
 
-        steps.add(new TurnToHeading(robot, runtime, 90, 0.3, 3));
+        steps.add(new TurnToHeading(robot, runtime, 95, 0.3, 3));
 
         steps.add(new ToBlue(robot, runtime, 5, 0.5));
 

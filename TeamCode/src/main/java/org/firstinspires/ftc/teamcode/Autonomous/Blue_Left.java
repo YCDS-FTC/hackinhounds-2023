@@ -43,6 +43,7 @@ import org.firstinspires.ftc.teamcode.AutonCommands.SetWrist;
 import org.firstinspires.ftc.teamcode.AutonCommands.StrafeForDistance;
 import org.firstinspires.ftc.teamcode.AutonCommands.ToBlue;
 import org.firstinspires.ftc.teamcode.AutonCommands.ToBlueStrafe;
+import org.firstinspires.ftc.teamcode.AutonCommands.TurnAndSlide;
 import org.firstinspires.ftc.teamcode.AutonCommands.TurnToHeading;
 import org.firstinspires.ftc.teamcode.AutonCommands.WaitForTime;
 import org.firstinspires.ftc.teamcode.Hardware.Command;
@@ -168,11 +169,13 @@ public class Blue_Left extends LinearOpMode {
 
         steps.add(new Reposition(robot, runtime, 28, 5, -0.3));
 
-        steps.add(new TurnToHeading(robot, runtime, -90, 0.3, 2));
+//        steps.add(new TurnToHeading(robot, runtime, -90, 0.3, 2));
 
         steps.add(new SetWrist(robot, runtime, 0.05, 0.54));
 
-        steps.add(new SlideToPosition(robot, runtime, 0, 1, 3));
+//        steps.add(new SlideToPosition(robot, runtime, 0, 1, 3));
+
+        steps.add(new TurnAndSlide(robot, runtime, -90, 0.3, 3, 0,1));
 
         steps.add(new MoveForDistance(robot, 20, 10, 10, runtime, 3, 0.5, 1));
 

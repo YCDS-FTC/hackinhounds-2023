@@ -174,6 +174,8 @@ public class Red_Right extends LinearOpMode {
 
         steps.add(new SetWrist(robot, runtime, 0.05, 0.54));
 
+        steps.add(new SetClaws(robot, runtime, 0.1, "bottom", 0.2));
+
         steps.add(new SlideToPosition(robot, runtime, 0, 1, 3));
 
         steps.add(new MoveForDistance(robot, 20, 10, 10, runtime, 3, 0.5, 1));

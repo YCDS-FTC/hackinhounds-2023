@@ -178,22 +178,22 @@ public class Blue_Right extends LinearOpMode {
 //            steps.add(new MoveForDistance(robot, 10, 3, 3, runtime, 5, -0.5, 1));
         } else if (propPos == 3) {
             steps.add(new TurnToHeading(robot, runtime, -90, 0.5, 5));
-            steps.add(new MoveForDistance(robot, 1, 0, 0, runtime, 5, 0.3, 1));
+            //steps.add(new MoveForDistance(robot, 1, 0, 0, runtime, 5, 0.3, 1));
             steps.add(new WaitForTime(robot, runtime, 0.5));
             steps.add(new SetClaws(robot, runtime, 0.5, "bottom", 0));
-            steps.add(new SetWrist(robot, runtime, 0.1, 0.6));
+            steps.add(new SetWrist(robot, runtime, 0.1, 0.26));
             steps.add(new MoveForDistance(robot, 2, 1, 1, runtime, 5, -0.5, 1));
             steps.add(new StrafeForDistance(robot, 20, 1, 1, runtime, 5, -0.5, 1));
-            steps.add(new TurnToHeading(robot, runtime, -90, 0.5, 5));
+            steps.add(new TurnToHeading(robot, runtime, 90, 0.5, 5));
         }
 
         steps.add(new SetWrist(robot, runtime, 0.1, 0.26));
 
-        steps.add(new Reposition(robot, runtime, 50, 5, 0.3));
+        steps.add(new Reposition(robot, runtime, 50, 5, -0.3));
 
-        steps.add(new TurnToHeading(robot, runtime, -90, 0.3, 2));
+        steps.add(new TurnToHeading(robot, runtime, 90, 0.3, 2));
 
-        if (propPos == 3) {
+        if (propPos == 1 || propPos == 3) {
             steps.add(new MoveForDistance(robot, 75, 10, 10, runtime, 5, 0.5, 1));
         } else {
             steps.add(new MoveForDistance(robot, 70, 10, 10, runtime, 5, 0.5, 1));
@@ -201,7 +201,7 @@ public class Blue_Right extends LinearOpMode {
 
         steps.add(new TurnToHeading(robot, runtime, 90, 0.5, 2));
 
-        steps.add(new TestForOthers(robot, runtime, 22, 27, 34, 30, 20,14,5, 0.5, -4000, 1, propPos));
+        steps.add(new TestForOthers(robot, runtime, 21, 27, 34, 31, 20,14,5, -0.5, -4000, 1, propPos));
 
 //        if (propPos == 1) {
 //            steps.add(new RepositionAndSlide(robot, runtime, 34, 5, 0.3, -3000, 1));

@@ -67,7 +67,7 @@ public class ToBlue extends Command {
                 setState(ENDING);
             } else {
                 measure = robot.rangeSensor.getDistance(DistanceUnit.INCH);
-                if (robot.colorSensor.blue() > 47) {
+                if (robot.colorSensor.blue() > 49) {
                     setState(ENDING);
                 } else {
                     robot.leftFront.setPower(powerLevel);
