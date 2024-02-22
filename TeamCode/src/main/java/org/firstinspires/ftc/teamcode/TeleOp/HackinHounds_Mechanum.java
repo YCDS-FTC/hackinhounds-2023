@@ -158,7 +158,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
             double slidePower = gamepad2.left_stick_y;
             int slideCurrentPos = robot.slide.getCurrentPosition();
-            if ((slidePower < -0.1) && (slideCurrentPos > -11000)) {
+            if ((slidePower < -0.1) && (slideCurrentPos > -5000)) {
                 robot.slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 slideMoving = false;
                 robot.slide.setPower(slidePower);
@@ -194,7 +194,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             //Was originally 0.6, 0.84
             // max value specifies how far DOWN the claw moves -- at 0.5, the claw is parallel to the floor
             // min value specifies how far UP the claw moves -- at 0.25 the claw is about parallel to the backboard
-            robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.26, 0.54));
+            robot.wrist.setPosition(robot.clamp(robot.wrist.getPosition() + wristPower, 0.26, 0.54));
 
             if (gamepad2.right_trigger >= 0.1) {
                 robot.top_claw.setPosition(0.78);
@@ -268,9 +268,5 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             telemetry.addLine("if you like to talk to tomatos, if a squash can make you smile. if you like to waltz with potatoes up and down the produce aisle, have we got a show for you");
             telemetry.update();
         }
-    }
-    private double clamp(double x, double min, double max) {
-
-        return Math.max(min,Math.min(max,x));
     }
 }

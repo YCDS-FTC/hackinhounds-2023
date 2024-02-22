@@ -81,6 +81,7 @@ import java.util.List;
  */
 
 @Autonomous(name = "RedRight")
+//@Disabled
 public class Red_Right extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time

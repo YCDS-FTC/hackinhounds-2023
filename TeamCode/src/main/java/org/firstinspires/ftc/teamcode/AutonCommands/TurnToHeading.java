@@ -55,7 +55,8 @@ public class TurnToHeading extends Command {
             double elapsedTime = timer.milliseconds()-startTime;
             double currentAngle = robot.getAngle();
             double angleError = desiredAngle - currentAngle;
-            if (turnSign * angleError > 0 && elapsedTime < timeOut) {
+            // Message: It originally was if > 0, Now trying to do > 0.5 for to speed it up
+            if (turnSign * angleError > 0.5 && elapsedTime < timeOut) {
                 double powerFactor = Math.min(Math.abs((turnSign*angleError)/45.0),1.0);
 //                if (turnSign >= 0) {
                     robot.leftFront.setPower(-turnSign*powerLevel*powerFactor);

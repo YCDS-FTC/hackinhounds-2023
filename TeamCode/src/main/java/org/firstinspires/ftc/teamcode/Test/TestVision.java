@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -66,6 +67,7 @@ import java.util.concurrent.TimeUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
 @Autonomous(name = "Test AprilTag", group = "Concept")
+@Disabled
 public class TestVision extends LinearOpMode {
 
     private VisionTestHardware robot = new VisionTestHardware();

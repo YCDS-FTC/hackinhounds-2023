@@ -37,7 +37,9 @@ public class MoveForDistance extends Command {
     private int BrightStartTicks;
     private int BleftEndTicks;
     private int BrightEndTicks;
-
+    private boolean correction;
+    private double heading;
+    private double gain;
     private double inches;
 
     private ArrayList<Integer> currentTicks;
@@ -59,10 +61,12 @@ public class MoveForDistance extends Command {
             powerDirection = 1.0;
         }
         this.powerLevel = Math.abs(powerLevel);
-        this.diff = diff;
+        this.correction = false;
         this.robot = (HackinHoundsHardware) getRobot();
         this.useInit = true;
         this.useEnd = true;
+        this.heading = 0;
+        this.gain = 0;
 
         // Set all encoder ticks to 0
         FleftTicks = 0;
@@ -79,7 +83,46 @@ public class MoveForDistance extends Command {
         setState(STARTING);
     }
 
-    public MoveForDistance(Hardware robot, double totalDistance, double riseDistance, double fallDistance, ElapsedTime timer, double timeOut, double powerLevel, double diff, boolean useInit, boolean useEnd) {
+    public MoveForDistance(Hardware robot, double totalDistance, double riseDistance, double fallDistance, ElapsedTime timer, double timeOut, double powerLevel, boolean correction, double heading, double gain) {
+        super(robot);
+        this.timer = timer;
+        this.inches=totalDistance;
+        if (timeOut < 0) {
+            timeOut = 30;
+        }
+        this.timeOut = timeOut * 1000;
+        this.totalTicks = totalDistance * HackinHoundsHardware.TICK_PER_INCH;
+        this.riseTicks = riseDistance * HackinHoundsHardware.TICK_PER_INCH;
+        this.fallTicks = fallDistance * HackinHoundsHardware.TICK_PER_INCH;
+        if (powerLevel < 0) {
+            powerDirection = -1.0;
+        } else {
+            powerDirection = 1.0;
+        }
+        this.powerLevel = Math.abs(powerLevel);
+        this.correction = correction;
+        this.robot = (HackinHoundsHardware) getRobot();
+        this.useInit = true;
+        this.useEnd = true;
+        this.heading = heading;
+        this.gain = gain;
+
+        // Set all encoder ticks to 0
+        FleftTicks = 0;
+        FrightTicks = 0;
+        BleftTicks = 0;
+        BrightTicks = 0;
+
+        currentTicks = new ArrayList<Integer>();
+        currentTicks.add(0);
+        currentTicks.add(0);
+        currentTicks.add(0);
+        currentTicks.add(0);
+
+        setState(STARTING);
+    }
+
+    public MoveForDistance(Hardware robot, double totalDistance, double riseDistance, double fallDistance, ElapsedTime timer, double timeOut, double powerLevel, boolean correction, boolean useInit, boolean useEnd) {
         super(robot);
         if (timeOut < 0) {
             timeOut = 30;
@@ -90,7 +133,7 @@ public class MoveForDistance extends Command {
         this.riseTicks = riseDistance * HackinHoundsHardware.TICK_PER_INCH;
         this.fallTicks = fallDistance * HackinHoundsHardware.TICK_PER_INCH;
         this.powerLevel = powerLevel;
-        this.diff = diff;
+        this.correction = correction;
         this.robot = (HackinHoundsHardware) getRobot();
         this.useInit = useInit;
         this.useEnd = useEnd;
@@ -139,6 +182,10 @@ public class MoveForDistance extends Command {
             BrightStartTicks = robot.rightFront.getCurrentPosition();
             BleftEndTicks=BleftStartTicks + (int)((inches*HackinHoundsHardware.TICK_PER_INCH)*Math.signum(powerLevel));
             BrightEndTicks=BrightStartTicks + (int)((inches*HackinHoundsHardware.TICK_PER_INCH)*Math.signum(powerLevel));
+
+            if (!correction) {
+                heading = robot.getAngle();
+            }
         }
         setState(RUNNING);
     }
@@ -160,6 +207,10 @@ public class MoveForDistance extends Command {
                 int currentBRightTicks = Math.abs(robot.rightFront.getCurrentPosition() - BrightStartTicks);
                 currentTicks.set(3, currentBRightTicks);
 
+                double currentAngle = robot.getAngle();
+                double angleError = heading - currentAngle;
+                double correctionFactor = robot.clamp(Math.abs(gain * angleError * powerLevel), 0, powerLevel);
+
                 // This is the math behind the rise and fall distance which makes our trapezoidal movement when the power level is positive going forward, you can see more about it in our engineering portfolio/notebook
                 Integer d = 0;
                 for (Integer i : currentTicks) {
@@ -180,10 +231,17 @@ public class MoveForDistance extends Command {
                 if (Math.signum(powerLevel)*(FleftEndTicks - currentFLeftTicks) < 0  || Math.signum(powerLevel)*(FrightEndTicks - currentFRightTicks) < 0 || Math.signum(powerLevel)*(BrightEndTicks - currentBRightTicks) < 0 || Math.signum(powerLevel)*(BleftEndTicks - currentBLeftTicks) < 0){
                     setState(ENDING);
                 } else {
-                    robot.leftFront.setPower(power * powerDirection);
-                    robot.leftBack.setPower(power * powerDirection);
-                    robot.rightFront.setPower(power * powerDirection);
-                    robot.rightBack.setPower(power * powerDirection);
+                    if (angleError > 0) {
+                        robot.leftFront.setPower(power * powerDirection - correctionFactor);
+                        robot.leftBack.setPower(power * powerDirection - correctionFactor);
+                        robot.rightFront.setPower(power * powerDirection);
+                        robot.rightBack.setPower(power * powerDirection);
+                    } else {
+                        robot.leftFront.setPower(power * powerDirection);
+                        robot.leftBack.setPower(power * powerDirection);
+                        robot.rightFront.setPower(power * powerDirection - correctionFactor);
+                        robot.rightBack.setPower(power * powerDirection - correctionFactor);
+                    }
                 }
             }
         }

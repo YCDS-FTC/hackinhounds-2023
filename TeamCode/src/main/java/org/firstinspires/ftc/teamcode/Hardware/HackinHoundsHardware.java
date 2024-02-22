@@ -141,6 +141,10 @@ public class HackinHoundsHardware extends Hardware {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
+    public double clamp(double x, double min, double max) {
+        return Math.max(min,Math.min(max,x));
+    }
+
     public double getAngle() {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
