@@ -69,7 +69,7 @@ public class RepositionWithSlowDown extends Command {
                 setState(ENDING);
             } else {
                 measure = robot.rangeSensor.getDistance(DistanceUnit.INCH);
-                double powerFactor = Math.min(Math.abs(startMeasure - distance - startMeasure - measure)/20.0,1.0);
+                double powerFactor = Math.min(Math.abs(startMeasure - distance - (startMeasure - measure))/20.0,1.0);
                 if (measure > distance + 1) {
                     robot.leftFront.setPower(powerLevel * powerFactor);
                     robot.leftBack.setPower(-powerLevel * powerFactor);

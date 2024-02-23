@@ -100,13 +100,12 @@ public class Test extends LinearOpMode {
         telemetry.update();
         robot.launcher.setPosition(0.7);
 
-        steps.add(new MoveForDistance(robot, 100, 2, 1, runtime, 10, 0.75, true, 0, 0.07));
+        //steps.add(new MoveForDistance(robot, 100, 2, 1, runtime, 10, 0.75, true, 0, 0.07));
 
-        steps.add(new RepositionWithSlowDown(robot, runtime, 50, 5, 1));
+        steps.add(new RepositionWithSlowDown(robot, runtime, 10, 5, 1));
 
-        steps.add(new TurnToHeading(robot, runtime, 180, 0.5, 5));
+        steps.add(new TurnToHeading(robot, runtime, 0, 0.3, 5));
 
-        steps.add(new WaitForTime(robot, runtime, 3));
 
         // This is where we build the autonomous routine
         Command currentStep = steps.get(step);
