@@ -114,7 +114,7 @@ public class PutSlideDown extends LinearOpMode {
             }
 
             double wristPower = gamepad2.right_stick_y * 0.05;
-            robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.26, 0.54));
+            robot.wrist.setPosition(clamp(robot.wrist.getPosition() + wristPower, 0.26, 0.47));
 
             //Telemetry
             telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
