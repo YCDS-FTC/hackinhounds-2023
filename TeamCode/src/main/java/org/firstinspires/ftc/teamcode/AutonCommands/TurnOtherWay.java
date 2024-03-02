@@ -3,12 +3,11 @@ package org.firstinspires.ftc.teamcode.AutonCommands;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Command;
 import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 
-public class TurnToHeading extends Command {
+public class TurnOtherWay extends Command {
     private ElapsedTime timer;
     private double startTime;
     private double timeOut;
@@ -18,7 +17,7 @@ public class TurnToHeading extends Command {
     private double deltaAngle;
     double turnSign;
 
-    public TurnToHeading(Hardware robot, ElapsedTime timer, double heading, double powerLevel, double timeOut) {
+    public TurnOtherWay(Hardware robot, ElapsedTime timer, double heading, double powerLevel, double timeOut) {
         super(robot);
         this.robot = (HackinHoundsHardware) getRobot();
         //testRobot.resetAngle();

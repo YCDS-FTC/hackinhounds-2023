@@ -43,6 +43,7 @@ import org.firstinspires.ftc.teamcode.AutonCommands.SetClaws;
 import org.firstinspires.ftc.teamcode.AutonCommands.SetWrist;
 import org.firstinspires.ftc.teamcode.AutonCommands.SlideToPosition;
 import org.firstinspires.ftc.teamcode.AutonCommands.StrafeForDistance;
+import org.firstinspires.ftc.teamcode.AutonCommands.TurnOtherWay;
 import org.firstinspires.ftc.teamcode.AutonCommands.TurnToHeading;
 import org.firstinspires.ftc.teamcode.AutonCommands.WaitForTime;
 import org.firstinspires.ftc.teamcode.Hardware.Command;
@@ -78,6 +79,7 @@ import java.util.List;
  */
 
 @Autonomous(name = "Test")
+@Disabled
 public class Test extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time
@@ -100,12 +102,13 @@ public class Test extends LinearOpMode {
         telemetry.update();
         robot.launcher.setPosition(0.7);
 
-        //steps.add(new MoveForDistance(robot, 100, 2, 1, runtime, 10, 0.75, true, 0, 0.07));
+//        steps.add(new StrafeForDistance(robot, 50, 7, 10, runtime, 5, -0.8, true, 90, 0.1));
 
-        steps.add(new RepositionWithSlowDown(robot, runtime, 10, 5, 1));
+        steps.add(new TurnOtherWay(robot, runtime, -270, 0.3, 10));
 
-        steps.add(new TurnToHeading(robot, runtime, 0, 0.3, 5));
+        steps.add(new WaitForTime(robot, runtime, 5));
 
+        //steps.add(new MoveForDistance(robot, 70, 2, 1, runtime, 10, 0.75, true, 0, 0.07));
 
         // This is where we build the autonomous routine
         Command currentStep = steps.get(step);

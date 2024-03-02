@@ -8,9 +8,8 @@ import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class StrafeForDistance extends Command {
+public class MoveAndSlideDistanceSensor extends Command {
     private ElapsedTime timer;
     private double startTime;
     private double timeOut;
@@ -23,6 +22,9 @@ public class StrafeForDistance extends Command {
     private double diff;
     private boolean useInit;
     private boolean useEnd;
+    private double sPowerLevel;
+    private int position;
+    boolean slideDone = false;
 
     private int FleftTicks;
     private int FrightTicks;
@@ -42,9 +44,10 @@ public class StrafeForDistance extends Command {
     private double gain;
     private double inches;
 
+
     private ArrayList<Integer> currentTicks;
 
-    public StrafeForDistance(Hardware robot, double totalDistance, double riseDistance, double fallDistance, ElapsedTime timer, double timeOut, double powerLevel, double diff) {
+    public MoveAndSlideDistanceSensor(Hardware robot, double totalDistance, double riseDistance, double fallDistance, ElapsedTime timer, double timeOut, double powerLevel, int position, double sPowerLevel) {
         super(robot);
         this.timer = timer;
         this.inches=totalDistance;
@@ -61,10 +64,14 @@ public class StrafeForDistance extends Command {
             powerDirection = 1.0;
         }
         this.powerLevel = Math.abs(powerLevel);
-        this.diff = diff;
+        this.correction = false;
         this.robot = (HackinHoundsHardware) getRobot();
         this.useInit = true;
         this.useEnd = true;
+        this.heading = 0;
+        this.gain = 0;
+        this.position = position;
+        this.sPowerLevel = sPowerLevel;
 
         // Set all encoder ticks to 0
         FleftTicks = 0;
@@ -81,7 +88,7 @@ public class StrafeForDistance extends Command {
         setState(STARTING);
     }
 
-    public StrafeForDistance(Hardware robot, double totalDistance, double riseDistance, double fallDistance, ElapsedTime timer, double timeOut, double powerLevel, boolean correction, double heading, double gain) {
+    public MoveAndSlideDistanceSensor(Hardware robot, double totalDistance, double riseDistance, double fallDistance, ElapsedTime timer, double timeOut, double powerLevel, int position, double sPowerLevel, boolean correction, double heading, double gain) {
         super(robot);
         this.timer = timer;
         this.inches=totalDistance;
@@ -104,38 +111,8 @@ public class StrafeForDistance extends Command {
         this.useEnd = true;
         this.heading = heading;
         this.gain = gain;
-
-        // Set all encoder ticks to 0
-        FleftTicks = 0;
-        FrightTicks = 0;
-        BleftTicks = 0;
-        BrightTicks = 0;
-
-        currentTicks = new ArrayList<Integer>();
-        currentTicks.add(0);
-        currentTicks.add(0);
-        currentTicks.add(0);
-        currentTicks.add(0);
-
-        setState(STARTING);
-    }
-
-    public StrafeForDistance(Hardware robot, double totalDistance, double riseDistance, double fallDistance, ElapsedTime timer, double timeOut, double powerLevel, double diff, boolean useInit, boolean useEnd) {
-        super(robot);
-        this.timer = timer;
-        this.inches=totalDistance;
-        if (timeOut < 0) {
-            timeOut = 30;
-        }
-        this.timeOut = timeOut * 1000;
-        this.totalTicks = totalDistance * HackinHoundsHardware.TICK_PER_INCH;
-        this.riseTicks = riseDistance * HackinHoundsHardware.TICK_PER_INCH;
-        this.fallTicks = fallDistance * HackinHoundsHardware.TICK_PER_INCH;
-        this.powerLevel = powerLevel;
-        this.diff = diff;
-        this.robot = (HackinHoundsHardware) getRobot();
-        this.useInit = useInit;
-        this.useEnd = useEnd;
+        this.position = position;
+        this.sPowerLevel = sPowerLevel;
 
         // Set all encoder ticks to 0
         FleftTicks = 0;
@@ -174,11 +151,11 @@ public class StrafeForDistance extends Command {
             // Set the left and right starting ticks to their current position
             FleftStartTicks = robot.leftFront.getCurrentPosition();
             FrightStartTicks = robot.rightFront.getCurrentPosition();
-            FleftEndTicks=FleftStartTicks - (int)((inches*HackinHoundsHardware.TICK_PER_INCH)*Math.signum(powerLevel));
-            FrightEndTicks=FrightStartTicks - (int)((inches*HackinHoundsHardware.TICK_PER_INCH)*Math.signum(powerLevel));
+            FleftEndTicks=FleftStartTicks + (int)((inches*HackinHoundsHardware.TICK_PER_INCH)*Math.signum(powerLevel));
+            FrightEndTicks=FrightStartTicks + (int)((inches*HackinHoundsHardware.TICK_PER_INCH)*Math.signum(powerLevel));
 
-            BleftStartTicks = robot.leftBack.getCurrentPosition();
-            BrightStartTicks = robot.rightBack.getCurrentPosition();
+            BleftStartTicks = robot.leftFront.getCurrentPosition();
+            BrightStartTicks = robot.rightFront.getCurrentPosition();
             BleftEndTicks=BleftStartTicks + (int)((inches*HackinHoundsHardware.TICK_PER_INCH)*Math.signum(powerLevel));
             BrightEndTicks=BrightStartTicks + (int)((inches*HackinHoundsHardware.TICK_PER_INCH)*Math.signum(powerLevel));
 
@@ -201,22 +178,29 @@ public class StrafeForDistance extends Command {
                 currentTicks.set(0, currentFLeftTicks);
                 int currentFRightTicks = Math.abs(robot.rightFront.getCurrentPosition() - FrightStartTicks);
                 currentTicks.set(1, currentFRightTicks);
-                int currentBLeftTicks = Math.abs(robot.leftBack.getCurrentPosition() - BleftStartTicks);
+                int currentBLeftTicks = Math.abs(robot.leftFront.getCurrentPosition() - BleftStartTicks);
                 currentTicks.set(2, currentBLeftTicks);
-                int currentBRightTicks = Math.abs(robot.rightBack.getCurrentPosition() - BrightStartTicks);
+                int currentBRightTicks = Math.abs(robot.rightFront.getCurrentPosition() - BrightStartTicks);
                 currentTicks.set(3, currentBRightTicks);
 
                 double currentAngle = robot.getAngle();
                 double angleError = heading - currentAngle;
                 double correctionFactor = robot.clamp(Math.abs(gain * angleError * powerLevel), 0, powerLevel);
 
-                // This is the math behind the rise and fall distance which makes our trapezoidal movement when the power level is positive going right, you can see more about it in our engineering portfolio/notebook
+                // This is the math behind the rise and fall distance which makes our trapezoidal movement when the power level is positive going forward, you can see more about it in our engineering portfolio/notebook
                 Integer d = 0;
                 for (Integer i : currentTicks) {
                     d += i;
                 }
                 d = d/currentTicks.size();
-
+                if (Math.abs(robot.slide.getCurrentPosition()-position) > 10) {
+                    robot.slide.setTargetPosition(position);
+                    robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.slide.setPower(sPowerLevel);
+                } else {
+                    robot.slide.setPower(0);
+                    slideDone = true;
+                }
                 if (d < riseTicks) {
                     // Rising power
                     power = ((powerLevel - HackinHoundsHardware.MinPower)/riseTicks)*d + HackinHoundsHardware.MinPower;
@@ -227,22 +211,24 @@ public class StrafeForDistance extends Command {
                     // Falling power
                     power = ((HackinHoundsHardware.MinPower-powerLevel)/(fallTicks))*(d - (totalTicks-fallTicks)) + powerLevel;
                 }
-                if (Math.signum(powerLevel)*(-FleftEndTicks + currentFLeftTicks) < 0  || Math.signum(powerLevel)*(-FrightEndTicks + currentFRightTicks) < 0 || Math.signum(powerLevel)*(BleftEndTicks - currentBLeftTicks) < 0  || Math.signum(powerLevel)*(BrightEndTicks - currentBRightTicks) < 0){
-                    setState(ENDING);
+                if (Math.signum(powerLevel)*(FleftEndTicks - currentFLeftTicks) < 0  || Math.signum(powerLevel)*(FrightEndTicks - currentFRightTicks) < 0 || Math.signum(powerLevel)*(BrightEndTicks - currentBRightTicks) < 0 || Math.signum(powerLevel)*(BleftEndTicks - currentBLeftTicks) < 0){
+                    robot.leftFront.setPower(0);
+                    robot.leftBack.setPower(0);
+                    robot.rightFront.setPower(0);
+                    robot.rightBack.setPower(0);
+                    if (slideDone) {
+                        setState(ENDING);
+                    }
                 } else {
-//                    robot.leftFront.setPower(power * powerDirection);
-//                    robot.leftBack.setPower(-power * powerDirection);
-//                    robot.rightFront.setPower(-power * powerDirection);
-//                    robot.rightBack.setPower(power * powerDirection);
                     if (angleError > 0) {
                         robot.leftFront.setPower(power * powerDirection - correctionFactor);
-                        robot.leftBack.setPower(-power * powerDirection - correctionFactor);
-                        robot.rightFront.setPower(-power * powerDirection);
+                        robot.leftBack.setPower(power * powerDirection - correctionFactor);
+                        robot.rightFront.setPower(power * powerDirection);
                         robot.rightBack.setPower(power * powerDirection);
                     } else {
                         robot.leftFront.setPower(power * powerDirection);
-                        robot.leftBack.setPower(-power * powerDirection);
-                        robot.rightFront.setPower(-power * powerDirection - correctionFactor);
+                        robot.leftBack.setPower(power * powerDirection);
+                        robot.rightFront.setPower(power * powerDirection - correctionFactor);
                         robot.rightBack.setPower(power * powerDirection - correctionFactor);
                     }
                 }
@@ -260,4 +246,5 @@ public class StrafeForDistance extends Command {
         }
         setState(DONE);
     }
+
 }
