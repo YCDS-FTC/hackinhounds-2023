@@ -181,8 +181,8 @@ public class S_Red_Right_TCBF extends LinearOpMode {
             steps.add(new TurnToHeading(robot, runtime, 90, 0.5, 2));
             steps.add(new StrafeForDistance(robot, 25, 7, 7, runtime, 5, -0.6, 1));
 
-            steps.add(new MoveForDistance(robot, 68, 10, 10, runtime, 5, 0.75, true, -90, 0.03));
-            steps.add(new StrafeForDistance(robot, 52, 10, 15, runtime, 5, 0.75, true, -90, 0.05));
+            steps.add(new MoveForDistance(robot, 68, 10, 10, runtime, 5, 0.75, true, 90, 0.03));
+            steps.add(new StrafeForDistance(robot, 52, 10, 15, runtime, 5, 0.75, true, 90, 0.05));
 
         } else if (propPos == 2) {
             steps.add(new MoveForDistance(robot, 8, 5, 5, runtime, 5, -0.5, 1));
@@ -193,8 +193,8 @@ public class S_Red_Right_TCBF extends LinearOpMode {
             steps.add(new SetClaws(robot, runtime, 0.5, "top", 1));
             steps.add(new StrafeForDistance(robot, 35, 7, 7, runtime, 5, -0.6, 1));
 
-            steps.add(new MoveForDistance(robot, 77.5, 10, 10, runtime, 5, 0.75, true, -90, 0.03));
-            steps.add(new StrafeForDistance(robot, 51.5, 10, 15, runtime, 5, 0.75, true, -90, 0.05));
+            steps.add(new MoveForDistance(robot, 77.5, 10, 10, runtime, 5, 0.75, true, 90, 0.03));
+            steps.add(new StrafeForDistance(robot, 51.5, 10, 15, runtime, 5, 0.75, true, 90, 0.05));
 
         } else if (propPos == 1) {
             steps.add(new MoveForDistance(robot, 15, 5, 5, runtime, 5, -0.5, 1));
@@ -204,26 +204,26 @@ public class S_Red_Right_TCBF extends LinearOpMode {
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.3, 1));
             steps.add(new StrafeForDistance(robot, 25, 7, 7, runtime, 5, -0.6, 1));
 
-            steps.add(new MoveForDistance(robot, 72, 10, 10, runtime, 5, 0.75, true, -90, 0.03));
-            steps.add(new StrafeForDistance(robot, 52, 10, 15, runtime, 5, 0.75, true, -90, 0.05));
+            steps.add(new MoveForDistance(robot, 72, 10, 10, runtime, 5, 0.75, true, 90, 0.03));
+            steps.add(new StrafeForDistance(robot, 52, 10, 15, runtime, 5, 0.75, true, 90, 0.05));
 
         }
         steps.add(new SetWrist(robot, runtime, 0.01, 0.54));
 
-        steps.add(new TurnToHeading(robot, runtime, -90, 0.7, 2));
+        steps.add(new TurnToHeading(robot, runtime, 90, 0.7, 2));
 
-        steps.add(new MoveForDistance(robot, 5, 2, 2, runtime, 5, 0.3, true, -90, 0.03));
+        steps.add(new MoveForDistance(robot, 5, 2, 2, runtime, 5, 0.3, true, 90, 0.03));
 
         steps.add(new SetClaws(robot, runtime, 0.01, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
 
-        steps.add(new MoveForDistance(robot, 90, 10, 10, runtime, 5, -0.8, true, -90, 0.05));
+        steps.add(new MoveForDistance(robot, 90, 10, 10, runtime, 5, -0.8, true, 90, 0.05));
 
-        steps.add(new TurnToHeading(robot, runtime, -270, 0.5, 2));
+        steps.add(new TurnToHeading(robot, runtime, 270, 0.5, 2));
 
-        steps.add(new TestForOthers(robot, runtime, 30, 33, 30, 20, 14,20,5, -0.5, -2000, 1, propPos));
+        steps.add(new TestForOthers(robot, runtime, 30, 33, 30, 20, 14,20,5, 0.5, -2000, 1, propPos));
 
-        steps.add(new TurnToHeading(robot, runtime, -270, 0.5, 2));
+        steps.add(new TurnToHeading(robot, runtime, 270, 0.5, 2));
         //33, 20, 27
 //        if (propPos == 1) {
 //            steps.add(new RepositionAndSlide(robot, runtime, 27, 5, -0.3, -2000, 1));
