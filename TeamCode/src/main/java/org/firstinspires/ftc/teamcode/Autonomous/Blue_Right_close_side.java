@@ -80,7 +80,6 @@ import java.util.List;
  */
 
 @Autonomous(name = "BlueRightCloseSide")
-@Disabled
 public class Blue_Right_close_side extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time
@@ -137,7 +136,7 @@ public class Blue_Right_close_side extends LinearOpMode {
             }
         }
         telemetry.update();
-        robot.launcher.setPosition(0);
+        robot.launcher.setPosition(0.38);
 
         steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
@@ -181,16 +180,18 @@ public class Blue_Right_close_side extends LinearOpMode {
 
         steps.add(new Reposition(robot, runtime, 5, 5, -0.3));
 
-        steps.add(new TurnToHeading(robot, runtime, 95, 0.3, 3));
+        steps.add(new TurnToHeading(robot, runtime, 90, 0.3, 3));
+
+        steps.add(new MoveForDistance(robot, 50, 10, 10, runtime, 5, 0.5, 1));
 
         steps.add(new ToBlue(robot, runtime, 5, 0.5));
 
         if (propPos == 1) {
-            steps.add(new RepositionAndSlide(robot, runtime, 20, 5, -0.3, -4500, 1));
+            steps.add(new RepositionAndSlide(robot, runtime, 20, 5, -0.3, -2000, 1));
         } else if (propPos == 2) {
-            steps.add(new RepositionAndSlide(robot, runtime, 27, 5, -0.3, -4500, 1));
+            steps.add(new RepositionAndSlide(robot, runtime, 27, 5, -0.3, -2000, 1));
         } else {
-            steps.add(new RepositionAndSlide(robot, runtime, 33, 5, -0.3, -4500, 1));
+            steps.add(new RepositionAndSlide(robot, runtime, 33, 5, -0.3, -2000, 1));
         }
 
         steps.add(new SetClaws(robot, runtime, 0.1, "bottom", 0.15));

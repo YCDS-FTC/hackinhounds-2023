@@ -123,17 +123,8 @@ public class HackinHoundsHardware extends Hardware {
         wrist = robotMap.get(Servo.class, "wrist");
         bottom_claw = robotMap.get(Servo.class, "top_claw");
         top_claw = robotMap.get(Servo.class, "bottom_claw");
-        //launcher = robotMap.get(Servo.class, "launcher");
-        //hook = robotMap.get(Servo.class, "hook");
-
-
-        //IMportant plugged in areas thingies
-        //Expansion Hub:
-        //0 - hook
-        //2 - launcher
-
-        //Control Hub:
-        //0 - lights
+        launcher = robotMap.get(Servo.class, "launcher");
+        hook = robotMap.get(Servo.class, "hook");
 
         huskyLens = robotMap.get(HuskyLens.class, "huskylens");
 
@@ -142,7 +133,7 @@ public class HackinHoundsHardware extends Hardware {
         colorSensor = robotMap.get(ColorSensor.class, "color");
         distance = robotMap.get(Rev2mDistanceSensor.class, "distance");
 
-        //Lights = robotMap.get(RevBlinkinLedDriver.class, "lights");
+        Lights = robotMap.get(RevBlinkinLedDriver.class, "lights");
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");

@@ -102,7 +102,6 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-        robot.colorSensor.enableLed(false);
         while (opModeIsActive()) {
             if (gamepad1.y) {
                 shift = 1;
@@ -214,24 +213,25 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             }
 
             if (hold == true) {
-                //robot.launcher.setPosition(0);
+                robot.launcher.setPosition(0.38);
                 robot.wrist.setPosition(0.54);
                 hold = false;
             }
 
-//            if (gamepad2.back) {
-//                robot.launcher.setPosition(1);
-//            }
-//
-//            //Here is code for hanging mechanism
-//
-//            if (gamepad2.x) {
-//                robot.hook.setPosition(1);
-//            }
-//
-//            if (gamepad2.y) {
-//                robot.hook.setPosition(0.6);
-//            }
+            if (gamepad2.back) {
+                robot.launcher.setPosition(1);
+            }
+
+            //Here is code for hanging mechanism
+
+            if (gamepad2.x) {
+                robot.hook.setPosition(0.6);
+            }
+
+            if (gamepad2.y) {
+                robot.hook.setPosition(0.2);
+                robot.launcher.setPosition(0.38);
+            }
 
             if (gamepad2.a) {
                 robot.spool.setPower(1);
@@ -241,25 +241,23 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                 robot.spool.setPower(0);
             }
 
-//            if (robot.distance.getDistance(DistanceUnit.MM) < 36) {
-//                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
-//            } else {
-//                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_RED);
-//            }
+            if (robot.distance.getDistance(DistanceUnit.MM) < 36) {
+                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
+            } else {
+                robot.Lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_RED);
+            }
 
             //Telemetry
-//            telemetry.addData("Left stick:", "%f", gamepad2.left_stick_y);
-//            telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
-//            telemetry.addData("Wrist Pos:", "%f", robot.wrist.getPosition());
-//            //telemetry.addData("Launcher Pos:", "%f", robot.launcher.getPosition());
-//            telemetry.addData("LB:", "%d", robot.leftBack.getCurrentPosition());
-//            telemetry.addData("Angle:", "%f", robot.getAngle());
-//            telemetry.addData("ColorRed:", "%d", robot.colorSensor.red());
-//            telemetry.addData("ColorGreen:", "%d", robot.colorSensor.green());
-//            telemetry.addData("ColorBlue:", "%d", robot.colorSensor.blue());
-//            telemetry.addData("claw distance:", "%f", robot.distance.getDistance(DistanceUnit.MM) );
-//            telemetry.addLine("if you like to talk to tomatos, if a squash can make you smile. if you like to waltz with potatoes up and down the produce aisle, have we got a show for you");
-//            telemetry.update();
+            telemetry.addData("Left stick:", "%f", gamepad2.left_stick_y);
+            telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
+            telemetry.addData("Wrist Pos:", "%f", robot.wrist.getPosition());
+            telemetry.addData("Launcher Pos:", "%f", robot.launcher.getPosition());
+            telemetry.addData("Angle:", "%f", robot.getAngle());
+            telemetry.addData("ColorRed:", "%d", robot.colorSensor.red());
+            telemetry.addData("ColorGreen:", "%d", robot.colorSensor.green());
+            telemetry.addData("ColorBlue:", "%d", robot.colorSensor.blue());
+            telemetry.addData("distance to pixels", "%f", robot.distance.getDistance(DistanceUnit.MM));
+            telemetry.update();
         }
     }
 }

@@ -81,7 +81,7 @@ import java.util.List;
  */
 
 @Autonomous(name = "BlueLeft")
-@Disabled
+//@Disabled
 public class Blue_Left extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time
@@ -138,7 +138,7 @@ public class Blue_Left extends LinearOpMode {
             }
         }
         telemetry.update();
-        robot.launcher.setPosition(0);
+        robot.launcher.setPosition(0.38);
 
         steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
@@ -152,11 +152,11 @@ public class Blue_Left extends LinearOpMode {
         steps.add(new TurnToHeading(robot, runtime, 90, 0.5, 5));
 
         if (propPos == 1) {
-            steps.add(new RepositionAndSlide(robot, runtime, 20, 5, -0.3, -3000, 1));
+            steps.add(new RepositionAndSlide(robot, runtime, 20, 5, -0.3, -1300, 1));
         } else if (propPos == 2) {
-            steps.add(new RepositionAndSlide(robot, runtime, 27, 5, -0.3, -2500, 1));
+            steps.add(new RepositionAndSlide(robot, runtime, 27, 5, -0.3, -1300, 1));
         } else {
-            steps.add(new RepositionAndSlide(robot, runtime, 33, 5, -0.3, -3000, 1));
+            steps.add(new RepositionAndSlide(robot, runtime, 33, 5, -0.3, -1300, 1));
         }
 
         steps.add(new TurnToHeading(robot, runtime, 90, 0.5, 2));

@@ -137,7 +137,7 @@ public class S_Blue_Left_TFBF extends LinearOpMode {
             }
         }
         telemetry.update();
-        robot.launcher.setPosition(0);
+        robot.launcher.setPosition(0.38);
 
         steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 0.8, "bottom", 0.5));

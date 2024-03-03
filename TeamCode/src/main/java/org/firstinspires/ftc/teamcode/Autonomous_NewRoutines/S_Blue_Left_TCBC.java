@@ -138,7 +138,7 @@ public class S_Blue_Left_TCBC extends LinearOpMode {
             }
         }
         telemetry.update();
-        //robot.launcher.setPosition(0);
+        robot.launcher.setPosition(0.38);
 
         steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 0.8, "bottom", 0.5));
@@ -154,7 +154,7 @@ public class S_Blue_Left_TCBC extends LinearOpMode {
         if (propPos == 1) {
             steps.add(new RepositionAndSlide(robot, runtime, 20, 5, -0.3, -1200, 1));
         } else if (propPos == 2) {
-            steps.add(new RepositionAndSlide(robot, runtime, 24, 5, -0.3, -1200, 1));
+            steps.add(new RepositionAndSlide(robot, runtime, 25, 5, -0.3, -1200, 1));
         } else {
             steps.add(new RepositionAndSlide(robot, runtime, 33, 5, -0.3, -1200, 1));
         }
@@ -191,10 +191,10 @@ public class S_Blue_Left_TCBC extends LinearOpMode {
             steps.add(new StrafeForDistance(robot, 1, 0, 1, runtime, 1,0.3,1));
             steps.add(new WaitForTime(robot, runtime, 0.2));
             steps.add(new SetClaws(robot, runtime, 0.5, "top", 1));
-            steps.add(new StrafeForDistance(robot, 35, 7, 7, runtime, 5, 0.6, 1));
+            steps.add(new StrafeForDistance(robot, 36, 7, 7, runtime, 5, 0.6, 1));
 
-            steps.add(new MoveForDistance(robot, 77.5, 10, 10, runtime, 5, 0.75, true, -90, 0.03));
-            steps.add(new StrafeForDistance(robot, 24.5, 5, 10, runtime, 5, -0.75, true, -90, 0.05));
+            steps.add(new MoveForDistance(robot, 74, 10, 10, runtime, 5, 0.75, true, -90, 0.03));
+            steps.add(new StrafeForDistance(robot, 25, 5, 10, runtime, 5, -0.75, true, -90, 0.05));
 
         } else if (propPos == 3) {
             steps.add(new MoveForDistance(robot, 15, 5, 5, runtime, 5, -0.5, 1));

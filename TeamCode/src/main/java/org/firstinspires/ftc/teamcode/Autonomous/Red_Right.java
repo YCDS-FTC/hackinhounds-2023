@@ -82,7 +82,7 @@ import java.util.List;
  */
 
 @Autonomous(name = "RedRight")
-@Disabled
+//@Disabled
 public class Red_Right extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time
@@ -139,7 +139,7 @@ public class Red_Right extends LinearOpMode {
             }
         }
         telemetry.update();
-        robot.launcher.setPosition(0);
+        robot.launcher.setPosition(0.38);
 
         steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
         steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
