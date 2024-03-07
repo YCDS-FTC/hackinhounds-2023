@@ -36,6 +36,14 @@ import java.util.ArrayList;
 
 // Generic robot class
 public class HackinHoundsHardware extends Hardware {
+    public double topClawOpen = 1;
+    public double topClawClose = 0.5;
+    public double bottomClawOpen = 0;
+    public double bottomClawClose = 0.5;
+    public double wristUp = 0.325;
+    public double wristDown = 0.36;
+    public double launcherUp = 0.395;
+
     public HardwareMap robotMap;
 
     // Drivetrain Members

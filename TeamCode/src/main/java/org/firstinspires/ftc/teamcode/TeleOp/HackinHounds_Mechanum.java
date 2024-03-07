@@ -103,6 +103,13 @@ public class HackinHounds_Mechanum extends LinearOpMode {
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
+
+            if (hold == true) {
+                hold = false;
+                robot.launcher.setPosition(robot.launcherUp);
+                //robot.wrist.setPosition(0.6);
+            }
+
             if (gamepad1.y) {
                 shift = 1;
             }
@@ -175,7 +182,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
                 slideMoving = true;
                 robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.slide.setTargetPosition(5);
-                robot.wrist.setPosition(0.54);
+                robot.wrist.setPosition(0.77);
             }
 
             if (slideMoving) {
@@ -193,8 +200,7 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             //Was originally 0.6, 0.84
             // max value specifies how far DOWN the claw moves -- at 0.5, the claw is parallel to the floor
             // min value specifies how far UP the claw moves -- at 0.25 the claw is about parallel to the backboard
-            robot.wrist.setPosition(robot.clamp(robot.wrist.getPosition() + wristPower, 0.26, 0.54));
-
+            robot.wrist.setPosition(robot.clamp(robot.wrist.getPosition() + wristPower, 0.325, 0.358));
             if (gamepad2.right_trigger >= 0.1) {
                 robot.top_claw.setPosition(0.78);
             }
@@ -210,12 +216,6 @@ public class HackinHounds_Mechanum extends LinearOpMode {
 
             if (gamepad1.back) {
                 robot.imu.resetYaw();
-            }
-
-            if (hold == true) {
-                robot.launcher.setPosition(0.38);
-                robot.wrist.setPosition(0.54);
-                hold = false;
             }
 
             if (gamepad2.back) {

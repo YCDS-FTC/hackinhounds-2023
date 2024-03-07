@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.AutonCommands;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Command;
 import org.firstinspires.ftc.teamcode.Hardware.HackinHoundsHardware;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
@@ -193,10 +195,10 @@ public class MoveAndSlideDistanceSensor extends Command {
                     d += i;
                 }
                 d = d/currentTicks.size();
-                if (Math.abs(robot.slide.getCurrentPosition()-position) > 10) {
-                    robot.slide.setTargetPosition(position);
-                    robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (robot.distance.getDistance(DistanceUnit.MM) - position > 10) {
                     robot.slide.setPower(sPowerLevel);
+                } else if (robot.distance.getDistance(DistanceUnit.MM) - position < -10) {
+                    robot.slide.setPower(-sPowerLevel);
                 } else {
                     robot.slide.setPower(0);
                     slideDone = true;

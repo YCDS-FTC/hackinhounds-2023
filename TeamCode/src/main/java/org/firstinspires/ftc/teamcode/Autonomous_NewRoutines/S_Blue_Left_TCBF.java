@@ -138,12 +138,11 @@ public class S_Blue_Left_TCBF extends LinearOpMode {
             }
         }
         telemetry.update();
-        robot.launcher.setPosition(0.38);
+        robot.launcher.setPosition(robot.launcherUp);
+        steps.add(new SetClaws(robot, runtime, 0.01, "top", robot.topClawClose));
+        steps.add(new SetClaws(robot, runtime, 0.9, "bottom", robot.bottomClawClose));
 
-        steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
-        steps.add(new SetClaws(robot, runtime, 0.8, "bottom", 0.5));
-
-        steps.add(new SetWrist(robot, runtime, 0.1, 0.26));
+        steps.add(new SetWrist(robot, runtime, 0.1, robot.wristUp));
 
         steps.add(new MoveForDistance(robot, 2, 0, 0, runtime, 3, 0.5, 1));
 
@@ -165,19 +164,19 @@ public class S_Blue_Left_TCBF extends LinearOpMode {
 
         steps.add(new WaitForTime(robot, runtime, 0.2));
 
-        steps.add(new SetClaws(robot, runtime, 0.2, "bottom", 0));
+        steps.add(new SetClaws(robot, runtime, 0.2, "bottom", robot.bottomClawOpen));
 
         steps.add(new MoveAndSlide(robot, 20, 2, 2, runtime, 3, -0.5, -470, 1));
 
         steps.add(new Reposition(robot, runtime, 28, 5, -0.3));
 
-        steps.add(new SetWrist(robot, runtime, 0.05, 0.54));
+        steps.add(new SetWrist(robot, runtime, 0.01, robot.wristUp));
 
         if (propPos == 1) {
             steps.add(new ToBlue(robot, runtime, 5, -0.5));
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.3, 1));
             steps.add(new WaitForTime(robot, runtime, 0.2));
-            steps.add(new SetClaws(robot, runtime, 0.5, "top", 1));
+            steps.add(new SetClaws(robot, runtime, 0.5, "top", robot.topClawOpen));
             steps.add(new TurnToHeading(robot, runtime, -90, 0.5, 2));
             steps.add(new StrafeForDistance(robot, 25, 7, 7, runtime, 5, 0.6, 1));
 
@@ -190,7 +189,7 @@ public class S_Blue_Left_TCBF extends LinearOpMode {
             steps.add(new ToBlueStrafe(robot, runtime, 5, -0.3));
             steps.add(new StrafeForDistance(robot, 1, 0, 1, runtime, 1,0.3,1));
             steps.add(new WaitForTime(robot, runtime, 0.2));
-            steps.add(new SetClaws(robot, runtime, 0.5, "top", 1));
+            steps.add(new SetClaws(robot, runtime, 0.5, "top", robot.topClawOpen));
             steps.add(new StrafeForDistance(robot, 35, 7, 7, runtime, 5, 0.6, 1));
 
             steps.add(new MoveForDistance(robot, 77.5, 10, 10, runtime, 5, 0.75, true, -90, 0.03));
@@ -200,7 +199,7 @@ public class S_Blue_Left_TCBF extends LinearOpMode {
             steps.add(new MoveForDistance(robot, 15, 5, 5, runtime, 5, -0.5, 1));
             steps.add(new TurnToHeading(robot, runtime, -90, 0.5, 2));
             steps.add(new WaitForTime(robot, runtime, 0.2));
-            steps.add(new SetClaws(robot, runtime, 0.5, "top", 1));
+            steps.add(new SetClaws(robot, runtime, 0.5, "top", robot.topClawOpen));
             steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.3, 1));
             steps.add(new StrafeForDistance(robot, 25, 7, 7, runtime, 5, 0.6, 1));
 
@@ -208,14 +207,14 @@ public class S_Blue_Left_TCBF extends LinearOpMode {
             steps.add(new StrafeForDistance(robot, 52, 10, 15, runtime, 5, -0.75, true, -90, 0.05));
 
         }
-        steps.add(new SetWrist(robot, runtime, 0.01, 0.54));
+        steps.add(new SetWrist(robot, runtime, 0.01, robot.wristDown));
 
         steps.add(new TurnToHeading(robot, runtime, -90, 0.7, 2));
 
         steps.add(new MoveForDistance(robot, 5, 2, 2, runtime, 5, 0.3, true, -90, 0.03));
 
-        steps.add(new SetClaws(robot, runtime, 0.01, "top", 0.5));
-        steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
+        steps.add(new SetClaws(robot, runtime, 0.01, "top", robot.topClawClose));
+        steps.add(new SetClaws(robot, runtime, 1, "bottom", robot.bottomClawClose));
 
         steps.add(new MoveForDistance(robot, 90, 10, 10, runtime, 5, -0.8, true, -90, 0.05));
 
@@ -233,7 +232,7 @@ public class S_Blue_Left_TCBF extends LinearOpMode {
 //            steps.add(new RepositionAndSlide(robot, runtime, 27, 5, -0.3, -2000, 1));
 //        }
 
-        steps.add(new SetWrist(robot, runtime, 0.01, 0.26));
+        steps.add(new SetWrist(robot, runtime, 0.01, robot.wristUp));
 
         steps.add(new ToBlue(robot, runtime, 5, 0.5));
 
@@ -241,8 +240,8 @@ public class S_Blue_Left_TCBF extends LinearOpMode {
 
         steps.add(new MoveForDistance(robot, 0.5, 0, 0, runtime, 5, -0.4, 1));
 
-        steps.add(new SetClaws(robot, runtime, 0.01, "top", 1));
-        steps.add(new SetClaws(robot, runtime, 0.5, "bottom", 0));
+        steps.add(new SetClaws(robot, runtime, 0.01, "top", robot.topClawOpen));
+        steps.add(new SetClaws(robot, runtime, 0.5, "bottom", robot.bottomClawOpen));
 
         steps.add(new MoveForDistance(robot, 5, 2, 2, runtime, 3, -0.5, 1));
 

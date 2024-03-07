@@ -35,6 +35,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.AutonCommands.MoveAndSlideDistanceSensor;
 import org.firstinspires.ftc.teamcode.AutonCommands.MoveForDistance;
 import org.firstinspires.ftc.teamcode.AutonCommands.Reposition;
 import org.firstinspires.ftc.teamcode.AutonCommands.RepositionAndSlide;
@@ -79,7 +81,6 @@ import java.util.List;
  */
 
 @Autonomous(name = "Test")
-@Disabled
 public class Test extends LinearOpMode {
     private HackinHoundsHardware robot = new HackinHoundsHardware();
     //Create elapsed time variable and an instance of elapsed time
@@ -100,13 +101,11 @@ public class Test extends LinearOpMode {
         while(!isStarted()) {
         }
         telemetry.update();
-        robot.launcher.setPosition(0.7);
+        robot.launcher.setPosition(robot.launcherUp);
 
 //        steps.add(new StrafeForDistance(robot, 50, 7, 10, runtime, 5, -0.8, true, 90, 0.1));
 
-        steps.add(new TurnOtherWay(robot, runtime, -270, 0.3, 10));
-
-        steps.add(new WaitForTime(robot, runtime, 5));
+        steps.add(new MoveAndSlideDistanceSensor(robot, 30, 5, 5, runtime, 5, 0.5, 100, 1));
 
         //steps.add(new MoveForDistance(robot, 70, 2, 1, runtime, 10, 0.75, true, 0, 0.07));
 
@@ -133,6 +132,8 @@ public class Test extends LinearOpMode {
                 }
             }
             telemetry.addData("Turn angle", "%f", robot.getAngle());
+            telemetry.addData("slide Pos:", "%d", robot.slide.getCurrentPosition());
+            telemetry.addData("distance to pixels", "%f", robot.distance.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
     }

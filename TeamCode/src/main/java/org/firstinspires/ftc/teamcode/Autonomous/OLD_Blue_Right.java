@@ -137,10 +137,10 @@ public class OLD_Blue_Right extends LinearOpMode {
             }
         }
         telemetry.update();
-        robot.launcher.setPosition(0.38);
+        robot.launcher.setPosition(robot.launcherUp);
 
-        steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
-        steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
+        steps.add(new SetClaws(robot, runtime, 0.1, "top", robot.topClawClose));
+        steps.add(new SetClaws(robot, runtime, 1, "bottom", robot.bottomClawClose));
 
         steps.add(new SetWrist(robot, runtime, 1, 0.5));
 

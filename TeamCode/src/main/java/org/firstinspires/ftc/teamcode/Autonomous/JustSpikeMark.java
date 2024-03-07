@@ -137,12 +137,12 @@ public class JustSpikeMark extends LinearOpMode {
             }
         }
         telemetry.update();
-        robot.launcher.setPosition(0.38);
+        robot.launcher.setPosition(robot.launcherUp);
 
-        steps.add(new SetClaws(robot, runtime, 0.1, "top", 0.5));
-        steps.add(new SetClaws(robot, runtime, 1, "bottom", 0.5));
+        steps.add(new SetClaws(robot, runtime, 0.1, "top", robot.topClawClose));
+        steps.add(new SetClaws(robot, runtime, 1, "bottom", robot.bottomClawClose));
 
-        steps.add(new SetWrist(robot, runtime, 0.1, 0.5));
+        steps.add(new SetWrist(robot, runtime, 0.1, robot.wristDown));
 
         steps.add(new MoveForDistance(robot, 2, 0, 0, runtime, 5, 0.5, 1));
 
@@ -157,7 +157,7 @@ public class JustSpikeMark extends LinearOpMode {
             steps.add(new ToRed(robot, runtime, 5, 0.3));
             steps.add(new MoveForDistance(robot, 4, 1, 1, runtime, 5, -0.3, 1));
             steps.add(new WaitForTime(robot, runtime, 0.5));
-            steps.add(new SetClaws(robot, runtime, 0.5, "bottom", 0));
+            steps.add(new SetClaws(robot, runtime, 0.5, "bottom", robot.bottomClawOpen));
 
         } else if (propPos == 2) {
             steps.add(new TurnToHeading(robot, runtime, -90, 0.3, 2));
@@ -166,8 +166,8 @@ public class JustSpikeMark extends LinearOpMode {
             steps.add(new StrafeForDistance(robot, 2, 0, 0, runtime, 5, 0.5, 1));
             steps.add(new TurnToHeading(robot, runtime, -90, 0.3, 2));
             steps.add(new WaitForTime(robot, runtime, 0.5));
-            steps.add(new SetClaws(robot, runtime, 0.5, "bottom", 0));
-            steps.add(new SetWrist(robot, runtime, 0.1, 0.22));
+            steps.add(new SetClaws(robot, runtime, 0.5, "bottom", robot.bottomClawOpen));
+            steps.add(new SetWrist(robot, runtime, 0.1, robot.wristUp));
 //            steps.add(new ToRed(robot, runtime, 5, 0.3));
 //            steps.add(new MoveForDistance(robot, 4, 1, 1, runtime, 5, -0.3, 1));
 //            steps.add(new WaitForTime(robot, runtime, 0.5));
@@ -179,8 +179,8 @@ public class JustSpikeMark extends LinearOpMode {
             steps.add(new TurnToHeading(robot, runtime, 90, 0.5, 5));
             //steps.add(new MoveForDistance(robot, 1, 0, 0, runtime, 5, 0.3, 1));
             steps.add(new WaitForTime(robot, runtime, 0.5));
-            steps.add(new SetClaws(robot, runtime, 0.5, "bottom", 0));
-            steps.add(new SetWrist(robot, runtime, 0.1, 0.26));
+            steps.add(new SetClaws(robot, runtime, 0.5, "bottom", robot.bottomClawOpen));
+            steps.add(new SetWrist(robot, runtime, 0.1, robot.wristUp));
             steps.add(new MoveForDistance(robot, 2, 1, 1, runtime, 5, -0.5, 1));
         }
 
