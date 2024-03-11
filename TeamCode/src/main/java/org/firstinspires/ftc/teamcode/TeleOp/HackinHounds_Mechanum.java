@@ -202,16 +202,16 @@ public class HackinHounds_Mechanum extends LinearOpMode {
             // min value specifies how far UP the claw moves -- at 0.25 the claw is about parallel to the backboard
             robot.wrist.setPosition(robot.clamp(robot.wrist.getPosition() + wristPower, 0.325, 0.358));
             if (gamepad2.right_trigger >= 0.1) {
-                robot.top_claw.setPosition(0.78);
+                robot.top_claw.setPosition(robot.topClawOpen);
             }
             if (gamepad2.right_bumper) {
-                robot.top_claw.setPosition(0.5);
+                robot.top_claw.setPosition(robot.topClawClose);
             }
             if (gamepad2.left_trigger >= 0.1) {
-                robot.bottom_claw.setPosition(0.15);
+                robot.bottom_claw.setPosition(robot.bottomClawOpen);
             }
             if (gamepad2.left_bumper) {
-                robot.bottom_claw.setPosition(0.5);
+                robot.bottom_claw.setPosition(robot.bottomClawClose);
             }
 
             if (gamepad1.back) {

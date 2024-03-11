@@ -36,10 +36,10 @@ import java.util.ArrayList;
 
 // Generic robot class
 public class HackinHoundsHardware extends Hardware {
-    public double topClawOpen = 1;
-    public double topClawClose = 0.5;
-    public double bottomClawOpen = 0;
-    public double bottomClawClose = 0.5;
+    public double topClawOpen = 0.62;
+    public double topClawClose = 0.35;
+    public double bottomClawOpen = 0.45;
+    public double bottomClawClose = 1;
     public double wristUp = 0.325;
     public double wristDown = 0.36;
     public double launcherUp = 0.395;
@@ -129,8 +129,8 @@ public class HackinHoundsHardware extends Hardware {
         spool.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         wrist = robotMap.get(Servo.class, "wrist");
-        bottom_claw = robotMap.get(Servo.class, "top_claw");
-        top_claw = robotMap.get(Servo.class, "bottom_claw");
+        bottom_claw = robotMap.get(Servo.class, "bottom_claw");
+        top_claw = robotMap.get(Servo.class, "top_claw");
         launcher = robotMap.get(Servo.class, "launcher");
         hook = robotMap.get(Servo.class, "hook");
 
