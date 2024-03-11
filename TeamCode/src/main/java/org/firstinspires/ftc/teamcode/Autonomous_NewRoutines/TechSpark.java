@@ -168,6 +168,8 @@ public class TechSpark extends LinearOpMode {
 
         steps.add(new MoveAndSlide(robot, 20, 2, 2, runtime, 3, -0.5, 0, 1));
 
+        steps.add(new WaitForTime(robot, runtime, 1));
+
         steps.add(new Reposition(robot, runtime, 28, 5, -0.3));
 
         steps.add(new SetWrist(robot, runtime, 0.01, robot.wristDown));
